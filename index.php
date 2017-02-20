@@ -24,10 +24,8 @@ else {
 	$title = "home";
 }
 
-$myFuckingWindows = str_replace('/', '\\', $page);
-
 include ('./common/header.php');
 include ('./common/navigation.php');
-require_once ( BASE_DIR . $myFuckingWindows );
+require_once ( BASE_DIR . $page );
 include ('./common/footer.php');
 	

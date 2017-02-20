@@ -1,5 +1,7 @@
 RewriteEngine On
 
 RewriteRule ^post$ /index.php?page=post [L]
+# RewriteRule ^post/([a-zA-Z0-9-]+)$ /index.php?page=single&post=$1 [L]
+RewriteRule ^post/([0-9]+)$ /index.php?page=single&post=$1 [L]
 RewriteRule ^accueil$ /index.php?page=accueil [L]
 

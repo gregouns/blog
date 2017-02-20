@@ -6,25 +6,25 @@ if (isset($_GET['page'])) {
 	var_dump($_GET['page']);
 	switch ($_GET['page']) {
 		case 'accueil':
-			$page = './page/home.php';
-			$title = 'home';
+			$page = './pages/home.php';
+			$title = "home";
 			break;
 
 		case 'post':
-			$page = './page/post.php';
-			$title = 'post';
+			$page = './pages/post.php';
+			$title = "post";
 			break;
 
 		default:
 			$title = "Erreur";
-			$page  = './pages/erreur404';
+			$page  = './pages/erreur404.php';
 			break;
 
 	}
 }
 else { 
-	$page = './page/home.php';
-			$title = 'home';
+	$page = './pages/home.php';
+	$title = "home";
 }
 include ('./common/header.php');
 include ('./common/navigation.php');

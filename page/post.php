@@ -1,5 +1,5 @@
 <?php
-
+$message = '';
 $title = '';
 if (isset($_POST['title'])) {
 	$title = $_POST['title'];

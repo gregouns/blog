@@ -7,13 +7,17 @@ if (isset($_GET['page'])) {
 	switch ($_GET['page']) {
 		case 'accueil':
 			$page = './page/home.php';
+			$title = 'home';
 			break;
 
 		case 'post':
 			$page = './page/post.php';
-		
+			$title = 'post';
+			break;
+
 		default:
 			$page = './page/home.php';
+			$title = 'home';
 			break;
 	}
 }

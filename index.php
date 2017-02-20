@@ -27,5 +27,6 @@ else {
 }
 	include ('./common/header.php');
 	include ('./common/navigation.php');
-	include ('./common/footer.php');
 	include ($page);
+	include ('./common/footer.php');
+	

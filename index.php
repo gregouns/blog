@@ -3,7 +3,6 @@ ini_set('display_errors', true);
 error_reporting(E_ALL);
 
 if (isset($_GET['page'])) {
-	var_dump($_GET['page']);
 	switch ($_GET['page']) {
 		case 'accueil':
 			$page = './pages/home.php';
@@ -12,7 +11,6 @@ if (isset($_GET['page'])) {
 
 		case 'post':
 			$page = './pages/post.php';
-			$title = "post";
 			break;
 
 		default:
@@ -25,7 +23,9 @@ if (isset($_GET['page'])) {
 else { 
 	$page = './pages/home.php';
 	$title = "home";
+
 }
-include ('./common/header.php');
-include ('./common/navigation.php');
-include ('./common/footer.php');
+	include ('./common/header.php');
+	include ('./common/navigation.php');
+	include ('./common/footer.php');
+	include ($page);

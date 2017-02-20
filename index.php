@@ -16,10 +16,16 @@ if (isset($_GET['page'])) {
 			break;
 
 		default:
-			$page = './page/home.php';
+			$title = "Erreur";
+			$page  = './pages/erreur404';
+			break;
+
+	}
+}
+else { 
+	$page = './page/home.php';
 			$title = 'home';
 			break;
-	}
 }
 include ('./common/header.php');
 include ('./common/navigation.php');

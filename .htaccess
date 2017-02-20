@@ -1,0 +1,3 @@
+RewriteEngine On
+
+RewriteRule post$ /index.php?page=post [L]

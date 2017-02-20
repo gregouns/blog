@@ -1,19 +1,21 @@
 <?php
 ini_set('display_errors', true);
 error_reporting(E_ALL);
+define('BASE_DIR', dirname(__FILE__));
+
 if (isset($_GET['page'])) {
 	switch ($_GET['page']) {
 		case 'accueil':
-			$page  = './pages/home.php';
+			$page  = '/page/home.php';
 			$title = "home";
 			break;
 		case 'post':
-			$page  = './pages/post.php';
+			$page  = '/page/post.php';
 			$title = "post";
 			break;
 		default:
 			$title = "Erreur";
-			$page  = './pages/erreur404.php';
+			$page  = '/page/erreur404.php';
 			break;
 	}
 }
@@ -21,8 +23,11 @@ else {
 	$page  = './pages/home.php';
 	$title = "home";
 }
+
+$myFuckingWindows = str_replace('/', '\\', $page);
+
 include ('./common/header.php');
 include ('./common/navigation.php');
-include ($page);
+require_once ( BASE_DIR . $myFuckingWindows );
 include ('./common/footer.php');
 	

@@ -8,13 +8,18 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/blog/blog.git/accueil">accueil</a>
+      <a class="navbar-brand" href="/">Blog</a>
     </div>
 
     <!-- Collect the nav links, forms, and other content for toggling -->
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="/blog/blog.git/post">post <span class="sr-only">(current)</span></a></li>
+        <li <?php echo (( $_GET['page'] == '' || $_GET['page'] == 'accueil' ) ? 'class="active"' : '' ) ?>>
+          <a href="/">Accueil <?php echo (( $_GET['page'] == '' || $_GET['page'] == 'accueil' ) ? '<span class="sr-only">(current)</span>' : '') ?></a>
+        </li>
+        <li <?php echo (($_GET['page'] == 'post') ? 'class="active"' : '' ) ?>>
+          <a href="/post">Post <?php echo (($_GET['page'] == 'post') ? '<span class="sr-only">(current)</span>' : '') ?></a>
+        </li>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

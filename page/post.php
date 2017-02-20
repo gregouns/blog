@@ -9,8 +9,7 @@
 	</div>
 	<div class="form-group">
 		<label for="description">description</label>
-		<textarea id="description" class="form-control" name="description" value="<?php $_POST['description']?>">
-		</textarea>
+		<textarea id="description" class="form-control" name="description"><?php if (isset($_POST['description'])) {echo $_POST['description'];} ?></textarea>
 	</div>
 	<button>envoyer</button>
 </form>

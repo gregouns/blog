@@ -1,6 +1,8 @@
 <?php
+
 ini_set('display_errors', true);
 error_reporting(E_ALL);
+
 define('BASE_DIR', dirname(__FILE__));
 
 if (isset($_GET['page'])) {
@@ -9,10 +11,12 @@ if (isset($_GET['page'])) {
 			$page  = '/page/home.php';
 			$title = "home";
 			break;
+
 		case 'post':
 			$page  = '/page/post.php';
 			$title = "post";
 			break;
+
 		default:
 			$title = "Erreur";
 			$page  = '/page/erreur404.php';
@@ -20,12 +24,18 @@ if (isset($_GET['page'])) {
 	}
 }
 else { 
-	$page  = './pages/home.php';
+	$page  = '/page/home.php';
 	$title = "home";
+	$_GET['page'] = '';
 }
 
-include ('./common/header.php');
-include ('./common/navigation.php');
+$page = str_replace('/', '\\', $page);
+
+$_GLOBALS['page'] = $page;
+
+require_once (BASE_DIR . '/common/header.php');
+require_once (BASE_DIR . '/common/navigation.php');
 require_once ( BASE_DIR . $page );
-include ('./common/footer.php');
-	
+require_once (BASE_DIR . '/common/footer.php');
+
+?>

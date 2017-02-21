@@ -72,6 +72,7 @@ foreach($post_tags as $tag) {
 		if($cache_tag['tag'] == $tag) { // Le tag existe
 		$id_tag = $cache_key;
 		continue;
+		}
 	}
 	foreach ($post_tags as $value) {
 		if(!isset($id_tags)) {

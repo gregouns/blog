@@ -76,7 +76,7 @@ foreach($post_tags as $tag) {
 	foreach ($post_tags as $value) {
 		if(!isset($id_tags)) {
 			$query = "INSERT INTO 
-				table_tags(`id_tags`,`tags`') 
+				table_tags(`id_tags`,`tags`) 
 				VALUES(
 					NULL,
 					'{$_POST['tag']}'

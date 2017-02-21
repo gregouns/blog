@@ -1,4 +1,5 @@
 <?php
+
 $message = '';
 $title = '';
 if (isset($_POST['title'])) {
@@ -16,6 +17,8 @@ $tag = '';
 if (isset($_POST['tag'])) {
 	$tag = $_POST['tag'];
 }
+
+$cache_tags = array();
 $post_tags = array_map('trim', explode(',', $tag)); //suppression des caractères invisible en debut et fin de chaine
 $post_tags = array_map('strtolower', $post_tags); // pour les mots en minuscules
 

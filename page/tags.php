@@ -1,7 +1,7 @@
 <?php
 	
-	$tags = $_GET['tags'];
-	$query = "SELECT tags FROM table_tags WHERE id = '{$post}'";
+	$tags = $_GET['tag'];
+	$query = "SELECT tags FROM table_tags";
 
 	$rst = mysqli_query($cnt, $query);
 

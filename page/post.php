@@ -12,6 +12,12 @@ $description = '';
 if (isset($_POST['description'])) {
 	$description = $_POST['description'];
 }
+$tag = '';
+if (isset($_POST['tag'])) {
+	$tag = $_POST['tag'];
+}
+$post_tags = array_map('trim', explode(',', $tag)); //suppression des caractères invisible en debut et fin de chaine
+$post_tags = array_map('strtolower', $post_tags); // pour les mots en minuscules
 
 if ( $_POST ) {
 	$_error = false;
@@ -25,7 +31,7 @@ if ( $_POST ) {
 			$_error = true;
 			$msgError[] = 'Merci de renseigner la date au format YYYY-MM-DD';
 		}
-	}
+	}	 
 
 	if ( $_error == false ) {
 		$_POST['title'] = strip_tags($_POST['title']);
@@ -57,6 +63,30 @@ if ( $_POST ) {
 	}
 }
 
+foreach($post_tags as $tag) {
+	if(empty($tag)) // Si le tag est vide on passe au suivant
+		continue;
+ 
+	// Recherche tag
+	foreach($cache_tags AS $cache_key => $cache_tag) {
+		if($cache_tag['tag'] == $tag) { // Le tag existe
+		$id_tag = $cache_key;
+		continue;
+	}
+	foreach ($post_tags as $value) {
+		if(!isset($id_tags)) {
+			$query = "INSERT INTO 
+				table_tags(`id_tags`,`tags`') 
+				VALUES(
+					NULL,
+					'{$_POST['tag']}'
+			)";
+		}
+		if (mysqli_query($cnt, $query)) {
+			$message = '<div class="alert alert-info">Votre tag a bien été crée</div>';
+		}
+	}
+}
 ?>
 
 <?php echo $message ?>
@@ -73,5 +103,10 @@ if ( $_POST ) {
 		<label for="description">description</label>
 		<textarea id="description" class="form-control" name="description"><?php if (isset($_POST['description'])) {echo $_POST['description'];} ?></textarea>
 	</div>
+	<div class="form-group">
+		<label for="tag">define your tags</label>
+		<input id="tag" class="form-control" name="tag" type="text" value="<?php if (isset($_POST['tag'])) {echo $_POST['tag'];}?>" />
+	</div>
+	
 	<button>envoyer</button>
 </form>

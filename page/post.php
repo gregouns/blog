@@ -40,12 +40,12 @@ if ( $_POST ) {
 		$_POST['description'] = strip_tags($_POST['description']);
 		// $flagpost = true;
 		$query = "INSERT INTO 
-			posts (`post_id`,`title`,`description`,`date`,`status`) 
+			posts (`post_id`,`title`,`date`,`description`,`status`) 
 		VALUES (
 			NULL, 
 			'{$_POST['title']}',
-			'{$_POST['description']}',
 			'{$_POST['date']}',
+			'{$_POST['description']}',
 			1
 		)";
 		
@@ -65,15 +65,15 @@ if ( $_POST ) {
 	}
 }
 
-// foreach($post_tags as $tag) {
-	// if(empty($tag)) // Si le tag est vide on passe au suivant
-	// 	continue;
-	// }
-	$query = 'SELECT tag FROM tags';
-	$rst = mysqli_query($cnt ,$query);
-	while($arr = mysqli_fetch_array($rst)){
-		$tagsdb[] = $arr;
-	}
+foreach($post_tags as $tag) {
+	if(empty($tag)) // Si le tag est vide on passe au suivant
+		continue;
+}
+$query = 'SELECT tag FROM tags';
+$rst = mysqli_query($cnt ,$query);
+while($arr = mysqli_fetch_array($rst)){
+	$tagsdb[] = $arr;
+}
 	// var_dump($post_tags);
 foreach ($post_tags as $value) {
 	if(!in_array($value, $tagsdb) && $value != '') {

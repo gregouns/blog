@@ -1,0 +1,9 @@
+1. création table for post ('id' ,'title','date','description','status')
+2. création table for tags ('id','id_post','tag','status')
+3. recupéré le post de mon input pour le mettre sur ma home
+4. crée un lien sur mon post pour afficher le titre la date et la description sur une page single
+5. récupéré le tag de mon input pour le mettre sur la home au niveau du post
+6. crée un lien sur mon tag pour afficher mon tag sur une page tags
+	6.1 cree une id unique pour chaque tag
+	6.2 cree une jointure pour pouvoir ajouter tous les posts d un  meme tag
+	

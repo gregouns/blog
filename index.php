@@ -25,6 +25,10 @@ if (isset($_GET['page'])) {
 			$title = "single";
 			break;
 
+		case 'tags':
+			$page = '/page/tags.php';
+			$title = 'tags';
+
 		default:
 			$title = "Erreur";
 			$page  = '/page/erreur404.php';
@@ -45,7 +49,7 @@ $cnt = mysqli_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
 
 require_once (BASE_DIR . '/common/header.php');
 require_once (BASE_DIR . '/common/navigation.php');
-require_once ( BASE_DIR . $page );
+require_once (BASE_DIR . $page );
 require_once (BASE_DIR . '/common/footer.php');
 
 mysqli_close($cnt);

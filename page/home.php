@@ -12,7 +12,7 @@
 			// echo '<a href="/post/'.slugify($arr['title']).'">' . $arr['title'] . '</a><br />';
 			echo 'Title: <a style="color:orange;" href="/post/'.$arr['post_id'].'">' . $arr['title'] . '</a><br />';
 			echo 'Date: ' . date('D j M Y', $arr['timestamp']) . '<br/> Description: ' . $arr['description'] . '<br/>';
-			echo 'Tag: <a href="/tags/'.slugify($arr['tag_id']).'">' . $arr['tag'] . '</a><br />';
+			echo 'Tag: <a href="/tags/'.($arr['tag_id']).'">' . $arr['tag'] . '</a><br />';
 			echo '<br/><br/>';
 		}
 

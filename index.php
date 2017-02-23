@@ -27,7 +27,7 @@ if (isset($_GET['page'])) {
 
 		case 'tags':
 			$page = '/page/tags.php';
-			$title = 'tags';
+			$title = "tags";
 
 		default:
 			$title = "Erreur";

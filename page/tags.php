@@ -1,12 +1,10 @@
 <?php
-	
 	$tags = $_GET['tag'];
-	$query = "SELECT tags FROM table_tags";
+	$query = "SELECT tags.* tags WHERE id = '{$tag}' LIMIT 1";
 
 	$rst = mysqli_query($cnt, $query);
 
 	while($arr = mysqli_fetch_array($rst)) {
-		echo '<a href="/post/'.$arr['id'].'">' . $arr['tags'] . '</a><br />';
-		echo $arr['tags'] . '<br />';
+		echo '<a href="/tags/'.$arr['id_post'].'">' . $arr['tags'] . '</a><br />';
 		echo '<br /><br />';
 	}

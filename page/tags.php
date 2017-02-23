@@ -1,6 +1,6 @@
 <?php
 	$tags = $_GET['tag'];
-	$query = "SELECT tags.* tags WHERE tag_id = '{$tag}' LIMIT 1";
+	$query = "SELECT tags.* tags WHERE id = '{$tag}' LIMIT 1";
 
 	$rst = mysqli_query($cnt, $query);
 

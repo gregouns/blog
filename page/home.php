@@ -9,7 +9,16 @@
 	while($arr = mysqli_fetch_array($rst)) {
 		// echo '<a href="/post/'.slugify($arr['title']).'">' . $arr['title'] . '</a><br />';
 		echo '<a href="/post/'.$arr['id'].'">' . $arr['title'] . '</a><br />';
-		echo date('D j M Y', $arr['timestamp']);
+		echo date('D j M Y', $arr['timestamp']) . '<br/>' . $arr['description'];
 		echo '<br /><br />';
 	}
+
+	$query = "SELECT * FROM tags WHERE status = 1";
+	$rst = mysqli_query($cnt, $query);
+
+	while($arr = mysqli_fetch_array($rst)) {
+		echo '<a href="/tags/'.$arr['id'].'">' . $arr['tag'] . '</a><br />';
+		echo '<br /><br />';
+	}
+	//$query = "SELECT posts.* , tags.* FROM posts INNER JOIN tags ON posts.id = tags.id";
 ?>

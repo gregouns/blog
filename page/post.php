@@ -40,7 +40,7 @@ if ( $_POST ) {
 		$_POST['description'] = strip_tags($_POST['description']);
 		// $flagpost = true;
 		$query = "INSERT INTO 
-			posts (`id`,`title`,`description`,`date`,`status`) 
+			posts (`post_id`,`title`,`description`,`date`,`status`) 
 		VALUES (
 			NULL, 
 			'{$_POST['title']}',
@@ -78,10 +78,9 @@ if ( $_POST ) {
 foreach ($post_tags as $value) {
 	if(!in_array($value, $tagsdb) && $value != '') {
 		$query = "INSERT INTO 
-			tags(`id`,`id_post`,`tag`,`status`) 
+			tags(`tag_id`,`tag`,`status`)
 			VALUES(
 				NULL,
-				1,
 				'{$value}',
 				1
 		)";

@@ -18,7 +18,6 @@ if (isset($_POST['tag'])) {
 	$tag = $_POST['tag'];
 }
 
-$cache_tags = array();
 $post_tags = array_map('trim', explode(',', $tag)); //suppression des caractères invisible en debut et fin de chaine
 $post_tags = array_map('strtolower', $post_tags); // pour les mots en minuscules
 
@@ -39,13 +38,13 @@ if ( $_POST ) {
 	if ( $_error == false ) {
 		$_POST['title'] = strip_tags($_POST['title']);
 		$_POST['description'] = strip_tags($_POST['description']);
-
+		// $flagpost = true;
 		$query = "INSERT INTO 
 			posts (`id`,`title`,`description`,`date`,`status`) 
 		VALUES (
 			NULL, 
 			'{$_POST['title']}',
-			'{$_POST['description']}', 
+			'{$_POST['description']}',
 			'{$_POST['date']}',
 			1
 		)";
@@ -66,31 +65,32 @@ if ( $_POST ) {
 	}
 }
 
-foreach($post_tags as $tag) {
-	if(empty($tag)) // Si le tag est vide on passe au suivant
-		continue;
- 
-	// Recherche tag
-	foreach($cache_tags AS $cache_key => $cache_tag) {
-		if($cache_tag['tag'] == $tag) { // Le tag existe
-		$id_tag = $cache_key;
-		continue;
-		}
+// foreach($post_tags as $tag) {
+	// if(empty($tag)) // Si le tag est vide on passe au suivant
+	// 	continue;
+	// }
+	$query = 'SELECT tag FROM tags';
+	$rst = mysqli_query($cnt ,$query);
+	while($arr = mysqli_fetch_array($rst)){
+		$tagsdb[] = $arr;
 	}
-	foreach ($post_tags as $value) {
-		if(!isset($id_tags)) {
-			$query = "INSERT INTO 
-				table_tags(`id_tags`,`tags`) 
-				VALUES(
-					NULL,
-					'{$_POST['tag']}'
-			)";
-		}
+	// var_dump($post_tags);
+foreach ($post_tags as $value) {
+	if(!in_array($value, $tagsdb) && $value != '') {
+		$query = "INSERT INTO 
+			tags(`id`,`id_post`,`tag`,`status`) 
+			VALUES(
+				NULL,
+				1,
+				'{$value}',
+				1
+		)";
 		if (mysqli_query($cnt, $query)) {
-			$message = '<div class="alert alert-info">Votre tag a bien été crée</div>';
+		$message = '<div class="alert alert-info">Votre tag a bien été crée</div>';
 		}
 	}
 }
+
 ?>
 
 <?php echo $message ?>

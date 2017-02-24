@@ -43,7 +43,6 @@ if ( $_POST ) {
 	}
 	foreach ($post_tags as $value) {
 		if(!in_array($value, $tagsdb) && $value != "") {
-			echo "test";
 			$query = "INSERT INTO 
 				tags(`tag_id`,`tag`,`status`)
 				VALUES(
@@ -54,7 +53,6 @@ if ( $_POST ) {
 			mysqli_query($cnt, $query);	
 		}
 		$query = "SELECT tag_id FROM tags where tag = '".$value."' ";
-		echo $query;
 		$rst   = mysqli_query($cnt, $query);
 		$arr   = mysqli_fetch_assoc($rst);
 		$all_tags_id .= $arr['tag_id'] . ",";
@@ -76,7 +74,6 @@ if ( $_POST ) {
 			'{$_POST['description']}',
 			1
 		)";
-		echo $query;
 		if (mysqli_query($cnt, $query)) {
 			$message = '<div class="alert alert-success">Votre post a bien été inséré</div>';
 		}

@@ -2,7 +2,7 @@
 
 	$post = $_GET['post'];
 
-	$query = "SELECT *, UNIX_TIMESTAMP(date) AS timestamp FROM posts WHERE status = 1 AND id = '{$post}' LIMIT 1";
+	$query = "SELECT *, UNIX_TIMESTAMP(date) AS timestamp FROM posts WHERE status = 1 AND post_id = '{$post}' LIMIT 1";
 	$rst = mysqli_query($cnt, $query);
 
 	while($arr = mysqli_fetch_array($rst)) {

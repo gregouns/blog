@@ -5,7 +5,7 @@
 
 	// $posts = array('id' ,'title','date','description','status');
 	// $tags  =  array('id','id_post','tag','status');
-		$query = "SELECT tag_id,tag, post_id, title, description, UNIX_TIMESTAMP(date) AS timestamp FROM tags, posts WHERE post_id = tag_id ORDER BY date DESC LIMIT 10";
+		$query = "SELECT post_id, tag_post_id, tag_id, tag, title, description, UNIX_TIMESTAMP(date) AS timestamp FROM tags, posts WHERE tag_post_id = tag_id ORDER BY date DESC LIMIT 10";
 		$rst = mysqli_query($cnt, $query);
 
 		while($arr = mysqli_fetch_array($rst)) {

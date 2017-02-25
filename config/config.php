@@ -1,8 +1,8 @@
 <?php
 
 define('MYSQL_HOST', 'localhost');
-define('MYSQL_DB', 'dev_blog');
-define('MYSQL_USER', 'greg');
-define('MYSQL_PASS', 'xxx');
+define('MYSQL_DB', 'data_tags');
+define('MYSQL_USER', 'gregouns');
+define('MYSQL_PASS', 'xxxxx');
 
 ?>

@@ -2,7 +2,6 @@
 
 $message = '';
 $title = '';
-$all_tags_id = '';
 if (isset($_POST['title'])) {
 	$title = $_POST['title'];
 }
@@ -14,13 +13,6 @@ $description = '';
 if (isset($_POST['description'])) {
 	$description = $_POST['description'];
 }
-$tag = '';
-if (isset($_POST['tag'])) {
-	$tag = $_POST['tag'];
-}
-
-$post_tags = array_map('trim', explode(',', $tag)); //suppression des caractères invisible en debut et fin de chaine
-$post_tags = array_map('strtolower', $post_tags); // pour les mots en minuscules
 
 if ( $_POST ) {
 	$_error = false;
@@ -36,39 +28,14 @@ if ( $_POST ) {
 		}
 	}
 
-	$query = 'SELECT tag FROM tags';
-	$rst = mysqli_query($cnt ,$query);
-	while($arr = mysqli_fetch_assoc($rst)){
-		$tagsdb[] = $arr["tag"];
-	}
-	foreach ($post_tags as $value) {
-		if(!in_array($value, $tagsdb) && $value != "") {
-			$query = "INSERT INTO 
-				tags(`tag_id`,`tag`,`status`)
-				VALUES(
-					NULL,
-					'{$value}',
-					1
-			)";
-			mysqli_query($cnt, $query);	
-		}
-		$query = "SELECT tag_id FROM tags where tag = '".$value."' ";
-		$rst   = mysqli_query($cnt, $query);
-		$arr   = mysqli_fetch_assoc($rst);
-		$all_tags_id .= $arr['tag_id'] . ",";
-	}
-	$all_tags_id = substr($all_tags_id,0,strlen($all_tags_id) - 1 );
-		 
-
 	if ( $_error == false ) {
 		$_POST['title'] = strip_tags($_POST['title']);
 		$_POST['description'] = strip_tags($_POST['description']);
 		// $flagpost = true;
 		$query = "INSERT INTO 
-			posts (`post_id`,`tag_post_id`,`title`,`date`,`description`,`status`) 
+			posts (`id`,`title`,`date`,`description`,`status`) 
 		VALUES (
 			NULL,
-			'{$all_tags_id}',
 			'{$_POST['title']}',
 			'{$_POST['date']}',
 			'{$_POST['description']}',

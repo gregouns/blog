@@ -13,6 +13,14 @@ $description = '';
 if (isset($_POST['description'])) {
 	$description = $_POST['description'];
 }
+$tag = '';
+if(isset($_POST['tag'])) {
+	$tag = $_POST['tag'];
+	$arr_tag = array();
+	if ($tag != '') {
+		$arr_tag = explode(',', $tag);
+	}
+}
 
 if ( $_POST ) {
 	$_error = false;
@@ -41,8 +49,36 @@ if ( $_POST ) {
 			'{$_POST['description']}',
 			1
 		)";
+
 		if (mysqli_query($cnt, $query)) {
-			$message = '<div class="alert alert-success">Votre post a bien été inséré</div>';
+			$post_id = mysqli_insert_id($cnt);
+			if ( $arr_tag && count($arr_tag) > 0) {
+				$counter = 0;
+				$query = "INSERT INTO tags (`id`, `post_id`, `tag`, `tag_url`, `status`) VALUES";
+				foreach ($arr_tag as $key => $tag) {
+					if ( $tag != '' ) {
+						$tag = strip_tags($tag);
+						$query .= "(
+							NULL,
+							'{$post_id}',
+							'{$tag}',
+							'".slugify($tag)."',
+							1
+						)" . ( count($arr_tag) == $counter+1 ? '' : ', ' );
+					}
+					$counter++;
+				}
+				echo $query;
+				if (mysqli_query($cnt, $query)) {
+					$message = '<div class="alert alert-success">Votre post a bien été inséré</div>';
+				}
+				else {
+					$message = '<div class="alert alert-danger">Un problème est survenu, veuillez contacter le webmaster</div>';
+				}
+			}
+			else {
+				$message = '<div class="alert alert-success">Votre post a bien été inséré</div>';
+			}	
 		}
 		else {
 			$message = '<div class="alert alert-danger">Un problème est survenu, veuillez contacter le webmaster</div>';

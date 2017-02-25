@@ -47,6 +47,7 @@ $page = str_replace('/', '\\', $page);
 $_GLOBALS['page'] = $page;
 
 $cnt = mysqli_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
+mysqli_query($cnt, "SET NAMES 'utf8'");
 
 require_once (BASE_DIR . '/common/header.php');
 require_once (BASE_DIR . '/common/navigation.php');

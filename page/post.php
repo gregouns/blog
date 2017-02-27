@@ -44,21 +44,20 @@ if ( $_POST ) {
 			posts (`id`, `title`, `date`, `url`, `description`, `status`) 
 			VALUES (
 			NULL,
-			'{$_POST['title']}',
-			'{$_POST['title']}',
-			'{$_POST['title']}',
+			'{$_POST['title']}',	
 			'{$_POST['date']}',
+			'{$_POST['title']}',
 			'{$_POST['description']}',
 			1
 		)";
 		if (mysqli_query($cnt, $query)) {
 				$post_id = mysqli_insert_id($cnt);
 				foreach ($arr_tags as $key => $tag) {
-					$queryTagName = "INSERT INTO tags VALUES (id, tag, url, status) VALUES ()";
+					$queryTagName = "INSERT INTO tags (id, tag, url, status) VALUES ()";
 
 					if (mysqli_query($cnt, $query)) {
 						$tag_id = mysqli_insert_id($cnt);
-						$queryTagRel = "INSERT INTO posts_tags VALUES (post_id, tag_id) VALUES ('{$post_id}', '{$tag_id}')";
+						$queryTagRel = "INSERT INTO posts_tags (post_id, tag_id) VALUES ('{$post_id}', '{$tag_id}')";
 					}
 				}
 				

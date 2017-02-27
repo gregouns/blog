@@ -13,13 +13,12 @@
 		WHERE
 			p.id = pt.post_id
 			AND pt.tag_id = t.id
-			AND t.url = '{$tag}'
+			AND t.tag = '{$tag}'
 	";
-	echo $query;
 	$rst = mysqli_query($cnt,$query);
 	while($arr = mysqli_fetch_array($rst)) {
-		echo 'tag: <a href = "/tags/'.$arr['pt.url'].'">' . $arr['tag'] . '</a><br/>';
-		echo 'post: <a href = "/post/'.$arr['p.url'].'">' . $arr['post'] . '</a><br/>';
+		echo 'tag: <a href = "/tags/'.$arr['url'].'">' . $arr['tag'] . '</a><br/>';
+		echo 'post: <a href = "/post/'.$arr['title'].'">' . $arr['title'] . '</a><br/>';
 		echo 'description: ' . $arr['description'];
-		echo 'date: ' . $arr['date'];
+		echo 'date: ' . $arr['date'] . '<br/>';
 	}

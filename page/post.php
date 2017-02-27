@@ -50,15 +50,14 @@ if ( $_POST ) {
 			'{$_POST['description']}',
 			1
 		)";
-		$arr_tags = [];
 		if (mysqli_query($cnt, $query)) {
 				$post_id = mysqli_insert_id($cnt);
 				foreach ($arr_tags as $key => $tag) {
 					$queryTagName = "INSERT INTO tags (id, tag, url, status) VALUES (NULL, '{$tag}', '{$tag}', 1)";
-
-					if (mysqli_query($cnt, $query)) {
+					if (mysqli_query($cnt, $queryTagName)) {
 						$tag_id = mysqli_insert_id($cnt);
 						$queryTagRel = "INSERT INTO posts_tags (post_id, tag_id) VALUES ('{$post_id}', '{$tag_id}')";
+						$rstTagRel1 = mysqli_query($cnt, $queryTagRel1);
 					}
 				}
 				

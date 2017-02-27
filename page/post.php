@@ -41,15 +41,29 @@ if ( $_POST ) {
 		$_POST['description'] = strip_tags($_POST['description']);
 		// $flagpost = true;
 		$query = "INSERT INTO 
-			posts (`id`,`title`,`date`,`description`,`status`) 
+			posts (`id`, `title`, `date`, `url`, `description`, `status`) 
 			VALUES (
 			NULL,
+			'{$_POST['title']}',
+			'{$_POST['title']}',
 			'{$_POST['title']}',
 			'{$_POST['date']}',
 			'{$_POST['description']}',
 			1
 		)";
 		if (mysqli_query($cnt, $query)) {
+				$post_id = mysqli_insert_id($cnt);
+				foreach ($arr_tags as $key => $tag) {
+					$queryTagName = "INSERT INTO tags VALUES (id, tag, url, status) VALUES ()";
+
+					if (mysqli_query($cnt, $query)) {
+						$tag_id = mysqli_insert_id($cnt);
+						$queryTagRel = "INSERT INTO posts_tags VALUES (post_id, tag_id) VALUES ('{$post_id}', '{$tag_id}')";
+					}
+				}
+				
+
+
 				$message = '<div class="alert alert-success">Votre post a bien été inséré</div>';
 		}
 		else {

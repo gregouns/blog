@@ -45,16 +45,16 @@ if ( $_POST ) {
 			VALUES (
 			NULL,
 			'{$_POST['title']}',
-			'{$_POST['title']}',	
+			'".slugify($title)."',	
 			'{$_POST['date']}',
 			'{$_POST['description']}',
 			1
 		)";
 		if (mysqli_query($cnt, $query)) {
 			$post_id = mysqli_insert_id($cnt);
-			$queryTagExist = "SELECT * FROM tags Where tag = '{$tag}'";
-			$rstTagExist = mysqli_query($cnt,$queryTagExist);
 			foreach ($arr_tag as $key => $tag) {
+				$queryTagExist = "SELECT * FROM tags Where tag = '{$tag}'";
+				$rstTagExist = mysqli_query($cnt,$queryTagExist);
 				if(mysqli_num_rows($rstTagExist) > 0) {
 					$queryTagRecup = "SELECT tags.id AS tid FROM tags Where tag = '{$tag}'";
 					$rst = mysqli_query($cnt, $queryTagRecup);
@@ -64,7 +64,7 @@ if ( $_POST ) {
 					}
 				}
 				else {
-					$queryTagName = "INSERT INTO tags (id, tag, url, status) VALUES (NULL, '{$tag}', '{$tag}', 1)";
+					$queryTagName = "INSERT INTO tags (id, tag, url, status) VALUES (NULL, '{$tag}', '".slugify($tag)."', 1)";
 					if (mysqli_query($cnt, $queryTagName)) {
 						$tag_id = mysqli_insert_id($cnt);
 						$queryTagRel = "INSERT INTO posts_tags (post_id, tag_id) VALUES ('{$post_id}', '{$tag_id}')";

@@ -20,6 +20,8 @@
         <li <?php echo (($_GET['page'] == 'post') ? 'class="active"' : '' ) ?>>
           <a href="/post">Post <?php echo (($_GET['page'] == 'post') ? '<span class="sr-only">(current)</span>' : '') ?></a>
         </li>
+        <li <?php echo (($_GET['page'] == 'formulaire') ? 'class="active"' : '' ) ?>>
+        <a href="/formulaire">Ajout catégorie <?php echo (($_GET['page'] == 'formulaire') ? '<span class="sr-only">(current)</span>' : '') ?></a>
       </ul>
     </div><!-- /.navbar-collapse -->
   </div><!-- /.container-fluid -->

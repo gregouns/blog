@@ -10,7 +10,6 @@
 		while($arr = mysqli_fetch_array($rst)) {
 
 			$query2 = "SELECT * FROM tags AS t,posts_tags AS pt WHERE pt.post_id = '{$arr['id']}'AND pt.tag_id = t.id";
-			echo $query2 . '<br/>';
 			$rst2 = mysqli_query($cnt2,$query2);
 			while($arr2 = mysqli_fetch_array($rst2)) {
 				echo 'tag: <a href = "/tags/'.$arr2['url'].'">' . $arr2['tag'] . '</a><br />';

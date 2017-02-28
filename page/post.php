@@ -54,18 +54,13 @@ if ( $_POST ) {
 			$post_id = mysqli_insert_id($cnt);
 			$queryTagExist = "SELECT * FROM tags Where tag = '{$tag}'";
 			$rstTagExist = mysqli_query($cnt,$queryTagExist);
-			if(mysqli_num_rows($rstTagExist) > 0) {
-				$queryTagInsered = "UPDATE * FROM tags Where tag = '{$tag}'";
-				echo $queryTagInsered;	
-				if (mysqli_query($cnt, $queryTagInsered)) {
-					$tag_existing_id = mysqli_insert_id($cnt);
-					echo $tag_existing_id;
-					$queryTagRel = "INSERT INTO posts_tags (post_id, tag_id) VALUES ('{$post_id}', '{$tag_existing_id}')";
+			foreach ($arr_tag as $key => $tag) {
+				if(mysqli_num_rows($rstTagExist) > 0 ) {
+					$queryTagRel = "INSERT INTO posts_tags (post_id, tag_id) VALUES ('{$post_id}', (SELECT tags.id AS tid FROM tags Where tag = '{$tag}'))";
+					echo $queryTagRel;
 					$rstTagRel = mysqli_query($cnt, $queryTagRel);
 				}
-			}
-			else {
-				foreach ($arr_tag as $key => $tag) {
+				else {
 					$queryTagName = "INSERT INTO tags (id, tag, url, status) VALUES (NULL, '{$tag}', '{$tag}', 1)";
 					if (mysqli_query($cnt, $queryTagName)) {
 						$tag_id = mysqli_insert_id($cnt);

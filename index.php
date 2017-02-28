@@ -30,6 +30,11 @@ if (isset($_GET['page'])) {
 			$title = "tags";
 			break;
 
+		case 'formulaire':
+			$page = '/page/formulaire.php';
+			$title = "formulaire";
+			break;
+
 		default:
 			$title = "Erreur";
 			$page  = '/page/erreur404.php';

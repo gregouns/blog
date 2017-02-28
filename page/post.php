@@ -55,9 +55,8 @@ if ( $_POST ) {
 			$queryTagExist = "SELECT * FROM tags Where tag = '{$tag}'";
 			$rstTagExist = mysqli_query($cnt,$queryTagExist);
 			foreach ($arr_tag as $key => $tag) {
-				if(mysqli_num_rows($rstTagExist) > 0 ) {
+				if(mysqli_num_rows($rstTagExist) > 0) {
 					$queryTagRel = "INSERT INTO posts_tags (post_id, tag_id) VALUES ('{$post_id}', (SELECT tags.id AS tid FROM tags Where tag = '{$tag}'))";
-					echo $queryTagRel;
 					$rstTagRel = mysqli_query($cnt, $queryTagRel);
 				}
 				else {

@@ -7,7 +7,7 @@
 	$query = "SELECT *, UNIX_TIMESTAMP(date) AS timestamp FROM posts WHERE url = '{$post}' AND status = 1 LIMIT 1";
 	$rst = mysqli_query($cnt, $query);
 		while($arr = mysqli_fetch_array($rst)) {
-			echo 'Title: <a style="color:orange;" href="/post/'.$arr['id'].'">' . $arr['title'] . '</a><br />';
+			echo 'Title: <a style="color:orange;" href="/post/'.$arr['url'].'">' . $arr['title'] . '</a><br />';
 			echo 'Description: ' . $arr['description'] . '<br />';
 			echo 'Date: ' . date('D j M Y', $arr['timestamp']);
 			echo '<br />';

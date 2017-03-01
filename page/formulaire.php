@@ -42,9 +42,10 @@ if ( $_POST ) {
 				if ($arr = mysqli_fetch_array($rst_cat_update)) {
 					$query_Scat_update = "UPDATE categories SET  id_parent = '{$arr['id']}' WHERE name = '{$Scat}'";
 					$rst_Scat_update = mysqli_query($cnt,$query_Scat_update);
-					$message = '<div class="alert alert-success">Votre menu a bien été inséré</div>';
+					$message = '<div class="alert alert-success">Votre catégorie a bien été inséré</div>';
 					echo $message;
-					echo 'update <br/>';
+					$message = '<div class="alert alert-info">Votre sous catégorie a bien été inséré</div>';
+					echo $message;
 				}
 			}	
 			if ( isset($Scat) && strlen($Scat) == 0 ) {
@@ -63,9 +64,8 @@ if ( $_POST ) {
 						$query_Scat_insert = "INSERT INTO categories (id,id_parent,name,status) 
 							VALUES (NULL,'{$arr['id']}','{$Scat}',1)";
 						$rst_Scat = mysqli_query($cnt, $query_Scat_insert);
-						$message = '<div class="alert alert-success">Votre menu a bien été inséré</div>';
+						$message = '<div class="alert alert-info">Votre sous menu a bien été inséré</div>';
 						echo $message;
-						echo 'ajout';
 					}
 				}
 			}	
@@ -95,7 +95,7 @@ if ( $_POST ) {
 					$query_Scat_insert = "INSERT INTO categories (id,id_parent,name,status) 
 						VALUES (NULL,'{$arr['id']}','{$Scat}',1)";
 					$rst_Scat = mysqli_query($cnt, $query_Scat_insert);
-					$message = '<div class="alert alert-success">votre sous menu a bien été inséré</div>';
+					$message = '<div class="alert alert-info">votre sous menu a bien été inséré</div>';
 					echo $message;
 					}
 				}
@@ -108,11 +108,11 @@ if ( $_POST ) {
 <form method="post" action="/formulaire">
 	<div class="form-group">
 		<label for="cat">catégorie</label>
-		<input id="cat" class="form-control" name="cat" type="text" value="<?php if (isset($_POST['cat'])) {echo $_POST['cat'];}?>" />
+		<input id="cat" class="form-control" name="cat" type="text" placeholder = "ajoutez une catégorie" value="<?php if (isset($_POST['cat'])) {echo $_POST['cat'];}?>" />
 	</div>
 	<div class="form-group">
 		<label for="Scat">sous catégorie</label>
-		<input id="Scat" class="form-control" name="Scat" type="text" value="<?php if (isset($_POST['Scat'])) {echo $_POST['Scat'];}?>" />
+		<input id="Scat" class="form-control" name="Scat" type="text" placeholder = "ajoutez une sous catégorie" value="<?php if (isset($_POST['Scat'])) {echo $_POST['Scat'];}?>" />
 	</div>
 	<button>envoyer</button>
 </form>

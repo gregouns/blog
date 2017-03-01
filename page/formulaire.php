@@ -44,7 +44,7 @@ if ( $_POST ) {
 					$rst_Scat_update = mysqli_query($cnt,$query_Scat_update);
 					$message = '<div class="alert alert-success">Votre menu a bien été inséré</div>';
 					echo $message;
-					echo 'update';
+					echo 'update <br/>';
 				}
 			}	
 			if ( isset($Scat) && strlen($Scat) == 0 ) {
@@ -63,7 +63,9 @@ if ( $_POST ) {
 						$query_Scat_insert = "INSERT INTO categories (id,id_parent,name,status) 
 							VALUES (NULL,'{$arr['id']}','{$Scat}',1)";
 						$rst_Scat = mysqli_query($cnt, $query_Scat_insert);
-						echo 'ajout d un nouveau sous menu';
+						$message = '<div class="alert alert-success">Votre menu a bien été inséré</div>';
+						echo $message;
+						echo 'ajout';
 					}
 				}
 			}	
@@ -78,13 +80,24 @@ if ( $_POST ) {
 				echo $message;
 			}
 			else {
-				// recherche id du parent crée
-				$query_cat_select = "SELECT id FROM categories Where name ='{$cat}'";
-				$rst_cat_select = mysqli_query($cnt,$query_cat_select);
-				while ($arr = mysqli_fetch_array($rst_cat_select)) {
-				$query_Scat_insert = "INSERT INTO categories (id,id_parent,name,status) 
-					VALUES (NULL,'{$arr['id']}','{$Scat}',1)";
-				$rst_Scat = mysqli_query($cnt, $query_Scat_insert);
+				$query_Scat_exist = "SELECT * FROM categories Where name = '{$Scat}'";
+				$rst_Scat_exist = mysqli_query($cnt,$query_Scat_exist);
+				if(mysqli_num_rows($rst_Scat_exist) > 0) {
+					$message = '<div class="alert alert-warning">ce sous menu existe déja</div>';
+					echo $message;
+				}					
+				else { 
+					// recherche id du parent crée
+					$query_cat_select = "SELECT id FROM categories Where name ='{$cat}'";
+					$rst_cat_select = mysqli_query($cnt,$query_cat_select);
+					// creation d un nouveau sous menu
+					while ($arr = mysqli_fetch_array($rst_cat_select)) {
+					$query_Scat_insert = "INSERT INTO categories (id,id_parent,name,status) 
+						VALUES (NULL,'{$arr['id']}','{$Scat}',1)";
+					$rst_Scat = mysqli_query($cnt, $query_Scat_insert);
+					$message = '<div class="alert alert-success">votre sous menu a bien été inséré</div>';
+					echo $message;
+					}
 				}
 			}
 		}	

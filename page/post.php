@@ -107,6 +107,11 @@ if ( $_POST ) {
 		<label for="tag">define your tags</label>
 		<input id="tag" class="form-control" name="tag" type="text" value="<?php if (isset($_POST['tag'])) {echo $_POST['tag'];}?>" />
 	</div>
-	
+	<div class="breadcrumb">
+		<h4>choose your category</h4>
+		<?php
+			include 'arborescence.php';
+		?>
+	</div>
 	<button>envoyer</button>
 </form>

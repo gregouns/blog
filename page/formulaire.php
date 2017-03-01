@@ -80,10 +80,11 @@ if ( $_POST ) {
 				echo $message;
 			}
 			else {
+				// condition si le sous menu n' existe pas
 				$query_Scat_exist = "SELECT * FROM categories Where name = '{$Scat}'";
 				$rst_Scat_exist = mysqli_query($cnt,$query_Scat_exist);
 				if(mysqli_num_rows($rst_Scat_exist) > 0) {
-					$message = '<div class="alert alert-warning">ce sous menu existe déja</div>';
+					$message = '<div class="alert-warning">votre menu appartient déjà a un menu</div>';
 					echo $message;
 				}					
 				else { 

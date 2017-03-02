@@ -21,6 +21,9 @@ if(isset($_POST['tag'])) {
 		$arr_tag = explode(',', $tag);
 	}
 }
+if(isset($_POST['cat'])) {
+	$cat = $_POST['cat'];
+}
 
 if ( $_POST ) {
 	$_error = false;
@@ -39,15 +42,18 @@ if ( $_POST ) {
 	if ( $_error == false ) {
 		$_POST['title'] = strip_tags($_POST['title']);
 		$_POST['description'] = strip_tags($_POST['description']);
+		$cat = $_POST['cat'];
+
 		// $flagpost = true;
 		$query = "INSERT INTO 
-			posts (`id`, `title`, `url`,`date`, `description`, `status`) 
+			posts (`id`, `title`, `url`,`date`, `description`, `post_cat_id`, `status`) 
 			VALUES (
 			NULL,
 			'{$_POST['title']}',
 			'".slugify($title)."',	
 			'{$_POST['date']}',
 			'{$_POST['description']}',
+			'{$cat}',
 			1
 		)";
 		if (mysqli_query($cnt, $query)) {
@@ -108,10 +114,12 @@ if ( $_POST ) {
 		<input id="tag" class="form-control" name="tag" type="text" value="<?php if (isset($_POST['tag'])) {echo $_POST['tag'];}?>" />
 	</div>
 	<div class="breadcrumb">
-		<h4>choose your category</h4>
-		<?php
-			include 'arborescence.php';
-		?>
+		<select name="cat">
+			<option value="0">choose a category</option>
+			<?php
+				include 'arborescence.php';
+			?>
+		</select>
 	</div>
 	<button>envoyer</button>
 </form>

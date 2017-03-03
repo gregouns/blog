@@ -4,5 +4,6 @@ RewriteRule ^post$ /index.php?page=post [L]
 RewriteRule ^post/([a-zA-Z0-9-]+)$ /index.php?page=single&post=$1 [L]
 RewriteRule ^tags/([a-zA-Z0-9-]+)$ /index.php?page=tags&tag=$1 [L]
 RewriteRule ^formulaire$ /index.php?page=formulaire [L]
+RewriteRule ^categorie/([a-zA-Z0-9-]+)$ /index.php?page=categorie&categorie=$1 [L]
 RewriteRule ^accueil$ /index.php?page=accueil [L]
 

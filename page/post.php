@@ -1,5 +1,4 @@
 <?php
-
 $message = '';
 $title = '';
 if (isset($_POST['title'])) {
@@ -21,8 +20,8 @@ if(isset($_POST['tag'])) {
 		$arr_tag = explode(',', $tag);
 	}
 }
-if(isset($_POST['cat'])) {
-	$cat = $_POST['cat'];
+if(isset($_POST['categorie'])) {
+	$cat = $_POST['categorie'];
 }
 
 if ( $_POST ) {
@@ -42,22 +41,26 @@ if ( $_POST ) {
 	if ( $_error == false ) {
 		$_POST['title'] = strip_tags($_POST['title']);
 		$_POST['description'] = strip_tags($_POST['description']);
-		$cat = $_POST['cat'];
-
 		// $flagpost = true;
 		$query = "INSERT INTO 
-			posts (`id`, `title`, `url`,`date`, `description`, `post_cat_id`, `status`) 
+			posts (`id`, `title`, `url`,`date`, `description`, `status`) 
 			VALUES (
 			NULL,
 			'{$_POST['title']}',
 			'".slugify($title)."',	
 			'{$_POST['date']}',
 			'{$_POST['description']}',
-			'{$cat}',
 			1
 		)";
 		if (mysqli_query($cnt, $query)) {
 			$post_id = mysqli_insert_id($cnt);
+			$queryCat = "SELECT id FROM categories WHERE name = '{$cat}'";
+			$rstCat = mysqli_query($cnt,$queryCat);
+			while ($arrCat = mysqli_fetch_array($rstCat)) {
+			$cat_id = $arrCat['id'];
+			echo $cat_id;
+			}
+			
 			foreach ($arr_tag as $key => $tag) {
 				$queryTagExist = "SELECT * FROM tags Where tag = '{$tag}'";
 				$rstTagExist = mysqli_query($cnt,$queryTagExist);
@@ -65,7 +68,7 @@ if ( $_POST ) {
 					$queryTagRecup = "SELECT tags.id AS tid FROM tags Where tag = '{$tag}'";
 					$rst = mysqli_query($cnt, $queryTagRecup);
 					while($arr = mysqli_fetch_array($rst)) {
-						$queryTagRel = "INSERT INTO posts_tags (post_id, tag_id) VALUES ('{$post_id}', '{$arr['tid']}')";
+						$queryTagRel = "INSERT INTO posts_tags (post_id, tag_id, cat_id) VALUES ('{$post_id}', '{$arr['tid']}', '{$cat_id}')";
 						$rstTagRel = mysqli_query($cnt, $queryTagRel);
 					}
 				}
@@ -73,7 +76,7 @@ if ( $_POST ) {
 					$queryTagName = "INSERT INTO tags (id, tag, url, status) VALUES (NULL, '{$tag}', '".slugify($tag)."', 1)";
 					if (mysqli_query($cnt, $queryTagName)) {
 						$tag_id = mysqli_insert_id($cnt);
-						$queryTagRel = "INSERT INTO posts_tags (post_id, tag_id) VALUES ('{$post_id}', '{$tag_id}')";
+						$queryTagRel = "INSERT INTO posts_tags (post_id, tag_id, cat_id) VALUES ('{$post_id}', '{$tag_id}', '{$cat_id}')";
 						$rstTagRel = mysqli_query($cnt, $queryTagRel);
 					}
 				}
@@ -114,12 +117,30 @@ if ( $_POST ) {
 		<input id="tag" class="form-control" name="tag" type="text" value="<?php if (isset($_POST['tag'])) {echo $_POST['tag'];}?>" />
 	</div>
 	<div class="breadcrumb">
-		<select name="cat">
+		<select id="cat" name="cat" >
 			<option value="0">choose a category</option>
 			<?php
 				include 'arborescence.php';
 			?>
+			
 		</select>
+		<button id="add" type="button">ajoutez une catégorie</button>
+		<input id="recup" type="text" name="categorie" value="<?php if (isset($_POST['categorie'])) {echo $_POST['categorie'];}?>" />
 	</div>
-	<button>envoyer</button>
+	<button type="submit">envoyer</button>
+
 </form>
+<script>
+	$(document).ready(function() {	
+		$('#add').click(function() {
+			var sel = $('select[name="cat"] option:selected').val();
+			var oldsel = $('#recup').attr("value");
+			if(oldsel == null)
+			{
+				oldsel = "";
+			}
+			oldsel += sel + ",";
+			$('#recup').attr("value",oldsel);
+		});
+	});
+</script>

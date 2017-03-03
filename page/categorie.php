@@ -6,11 +6,11 @@ $cat = $_GET['categorie'];
 $query = "SELECT * , p.url AS purl 
 	FROM 
 		posts AS p, 
-		posts_tags AS pt, 
+		posts_cats AS pc, 
 		categories AS c 
 	WHERE
-		p.id = pt.post_id
-		AND pt.cat_id = c.id
+		p.id = pc.post_id
+		AND pc.cat_id = c.id
 		AND c.name = '{$cat}'
 ";
 $rst = mysqli_query($cnt,$query);

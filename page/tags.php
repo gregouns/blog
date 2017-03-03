@@ -5,7 +5,7 @@
 	$tag = $_GET['tag'];
 
 	// I want the post that has tag
-	$query = "SELECT * 
+	$query = "SELECT *, p.url AS purl 
 		FROM 
 			posts AS p, 
 			posts_tags AS pt, 
@@ -18,7 +18,7 @@
 	$rst = mysqli_query($cnt,$query);
 	while($arr = mysqli_fetch_array($rst)) {
 		echo 'tag: <a href = "/tags/'.$arr['url'].'">' . $arr['tag'] . '</a><br/>';
-		echo 'post: <a href = "/post/'.$arr['title'].'">' . $arr['title'] . '</a><br/>';
+		echo 'post: <a style="color:orange;" href = "/post/'.$arr['purl'].'">' . $arr['title'] . '</a><br/>';
 		echo 'description: ' . $arr['description'];
 		echo 'date: ' . $arr['date'] . '<br/>';
 	}

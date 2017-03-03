@@ -11,10 +11,11 @@
 			echo 'Description: ' . $arr['description'] . '<br />';
 			echo 'Date: ' . date('D j M Y', $arr['timestamp']);
 			echo '<br />';
-			$query2 = "SELECT * FROM tags AS t,posts_tags AS pt WHERE pt.post_id = '{$arr['id']}'AND pt.tag_id = t.id";
+			$query2 = "SELECT * FROM categories AS c,tags AS t,posts_tags AS pt WHERE pt.post_id = '{$arr['id']}'AND pt.tag_id = t.id AND pt.cat_id = c.id";
 			$rst2 = mysqli_query($cnt2,$query2);
 			while($arr2 = mysqli_fetch_array($rst2)) {
 				echo 'tag: <a href = "/tags/'.$arr2['url'].'">' . $arr2['tag'] . '</a><br />';
+				echo 'categorie:<a style="color:green;" href = "/categorie/'.$arr2['name'].'">' . $arr2['name'] . '</a><br/>';
 			}
 		}
 

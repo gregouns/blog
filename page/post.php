@@ -1,4 +1,5 @@
 <?php
+
 $message = '';
 $title = '';
 if (isset($_POST['title'])) {
@@ -14,14 +15,22 @@ if (isset($_POST['description'])) {
 }
 $tag = '';
 if(isset($_POST['tag'])) {
-	$tag = $_POST['tag'];
+	$tag     = $_POST['tag'];
 	$arr_tag = array();
 	if ($tag != '') {
 		$arr_tag = explode(',', $tag);
 	}
 }
-if(isset($_POST['categorie'])) {
-	$cat = $_POST['categorie'];
+$arr_cat = '';
+if(isset($_POST['submit'])) {
+	if(isset($_POST['catego'])) {
+		if($_POST['catego'] > 0){
+			$arr_cat = $_POST['catego'];	
+		}
+		else {
+			
+		}
+	}
 }
 
 if ( $_POST ) {
@@ -54,30 +63,32 @@ if ( $_POST ) {
 		)";
 		if (mysqli_query($cnt, $query)) {
 			$post_id = mysqli_insert_id($cnt);
-			$queryCat = "SELECT id FROM categories WHERE name = '{$cat}'";
-			$rstCat = mysqli_query($cnt,$queryCat);
-			while ($arrCat = mysqli_fetch_array($rstCat)) {
-			$cat_id = $arrCat['id'];
-			echo $cat_id;
-			}
-			
-			foreach ($arr_tag as $key => $tag) {
-				$queryTagExist = "SELECT * FROM tags Where tag = '{$tag}'";
-				$rstTagExist = mysqli_query($cnt,$queryTagExist);
-				if(mysqli_num_rows($rstTagExist) > 0) {
-					$queryTagRecup = "SELECT tags.id AS tid FROM tags Where tag = '{$tag}'";
-					$rst = mysqli_query($cnt, $queryTagRecup);
-					while($arr = mysqli_fetch_array($rst)) {
-						$queryTagRel = "INSERT INTO posts_tags (post_id, tag_id, cat_id) VALUES ('{$post_id}', '{$arr['tid']}', '{$cat_id}')";
-						$rstTagRel = mysqli_query($cnt, $queryTagRel);
-					}
-				}
-				else {
-					$queryTagName = "INSERT INTO tags (id, tag, url, status) VALUES (NULL, '{$tag}', '".slugify($tag)."', 1)";
-					if (mysqli_query($cnt, $queryTagName)) {
-						$tag_id = mysqli_insert_id($cnt);
-						$queryTagRel = "INSERT INTO posts_tags (post_id, tag_id, cat_id) VALUES ('{$post_id}', '{$tag_id}', '{$cat_id}')";
-						$rstTagRel = mysqli_query($cnt, $queryTagRel);
+			foreach ($arr_cat as $key => $cat) {
+				$query_cat = "SELECT id FROM categories WHERE name = '{$cat}'";
+				$rst_cat = mysqli_query($cnt,$query_cat);
+				while ($arr2 = mysqli_fetch_array($rst_cat)) {
+					$cat_id = $arr2['id'];
+					
+					foreach ($arr_tag as $key => $tag) {
+						$queryTagExist = "SELECT * FROM tags Where tag = '{$tag}'";
+						$rstTagExist = mysqli_query($cnt,$queryTagExist);
+
+						if(mysqli_num_rows($rstTagExist) > 0) {
+							$queryTagRecup = "SELECT tags.id AS tid FROM tags Where tag = '{$tag}'";
+							$rst = mysqli_query($cnt, $queryTagRecup);
+							while($arr = mysqli_fetch_array($rst)) {
+								$queryTagRel = "INSERT INTO posts_tags (post_id, tag_id, cat_id) VALUES ('{$post_id}', '{$arr['tid']}', '{$cat_id}')";
+								$rstTagRel = mysqli_query($cnt, $queryTagRel);
+							}
+						}
+						else {
+							$queryTagName = "INSERT INTO tags (id, tag, url, status) VALUES (NULL, '{$tag}', '".slugify($tag)."', 1)";
+							if (mysqli_query($cnt, $queryTagName)) {
+								$tag_id = mysqli_insert_id($cnt);
+								$queryTagRel = "INSERT INTO posts_tags (post_id, tag_id, cat_id) VALUES ('{$post_id}', '{$tag_id}', '{$cat_id}')";
+								$rstTagRel = mysqli_query($cnt, $queryTagRel);
+							}
+						}
 					}
 				}
 			}
@@ -116,31 +127,13 @@ if ( $_POST ) {
 		<label for="tag">define your tags</label>
 		<input id="tag" class="form-control" name="tag" type="text" value="<?php if (isset($_POST['tag'])) {echo $_POST['tag'];}?>" />
 	</div>
-	<div class="breadcrumb">
-		<select id="cat" name="cat" >
-			<option value="0">choose a category</option>
+	<div class="form-group">
+		<label for="catego">choose your categories</label>
+		<select name="catego[]" class="selectpicker" multiple>
 			<?php
 				include 'arborescence.php';
-			?>
-			
+			?>		
 		</select>
-		<button id="add" type="button">ajoutez une catégorie</button>
-		<input id="recup" type="text" name="categorie" value="<?php if (isset($_POST['categorie'])) {echo $_POST['categorie'];}?>" />
 	</div>
-	<button type="submit">envoyer</button>
-
+	<button type="submit" name="submit" id="button" value="submit" >submit</button>
 </form>
-<script>
-	$(document).ready(function() {	
-		$('#add').click(function() {
-			var sel = $('select[name="cat"] option:selected').val();
-			var oldsel = $('#recup').attr("value");
-			if(oldsel == null)
-			{
-				oldsel = "";
-			}
-			oldsel += sel + ",";
-			$('#recup').attr("value",oldsel);
-		});
-	});
-</script>

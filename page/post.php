@@ -60,7 +60,6 @@ if ( $_POST ) {
 		)";
 		if (mysqli_query($cnt, $query)) {
 			$post_id = mysqli_insert_id($cnt);
-			if($arr_cat = '') {
 				foreach ($arr_cat as $key => $cat) {
 					$query_cat = "SELECT id FROM categories WHERE name = '{$cat}'";
 					$rst_cat = mysqli_query($cnt,$query_cat);
@@ -70,8 +69,7 @@ if ( $_POST ) {
 						$rst_insert_cat = mysqli_query($cnt,$query_insert_cat);
 					}
 				}
-			}
-			else {	
+			
 				foreach ($arr_tag as $key => $tag) {
 					$queryTagExist = "SELECT * FROM tags Where tag = '{$tag}'";
 					$rstTagExist = mysqli_query($cnt,$queryTagExist);
@@ -95,7 +93,6 @@ if ( $_POST ) {
 							$rstTagRel = mysqli_query($cnt, $queryTagRel);
 						}
 					}
-				}
 			}
 			$message = '<div class="alert alert-success">Votre post a bien été inséré</div>';
 		}

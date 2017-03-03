@@ -18,7 +18,7 @@ function afficher_menu($id_parent, $array) {
 	$html = "";
 	foreach ($array AS $lien) {
 		if ($id_parent == $lien['id_parent']) {
-			$html .= '<option id ="'.$lien['id'].'">' . $lien['id_parent'] . ' ' . $lien['category'] . '</option>';
+			$html .= '<option id ="'.$lien['id'].'">' . $lien['category'] . '</option>';
 			$html .= afficher_menu($lien['id'], $array);
 		}
 	}	 

@@ -35,6 +35,11 @@ if (isset($_GET['page'])) {
 			$title = "formulaire";
 			break;
 
+		case 'categorie':
+			$page = '/page/categorie.php';
+			$title = "categorie";
+			break;
+
 		default:
 			$title = "Erreur";
 			$page  = '/page/erreur404.php';

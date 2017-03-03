@@ -27,9 +27,6 @@ if(isset($_POST['submit'])) {
 		if($_POST['catego'] > 0){
 			$arr_cat = $_POST['catego'];	
 		}
-		else {
-			
-		}
 	}
 }
 
@@ -68,27 +65,31 @@ if ( $_POST ) {
 				$rst_cat = mysqli_query($cnt,$query_cat);
 				while ($arr2 = mysqli_fetch_array($rst_cat)) {
 					$cat_id = $arr2['id'];
-					
-					foreach ($arr_tag as $key => $tag) {
-						$queryTagExist = "SELECT * FROM tags Where tag = '{$tag}'";
-						$rstTagExist = mysqli_query($cnt,$queryTagExist);
+					$query_insert_cat = "INSERT INTO posts_cats (post_id, cat_id) VALUES ('{$post_id}', '{$cat_id}')";
+					$rst_insert_cat = mysqli_query($cnt,$query_insert_cat);
+				}
+			}	
+			foreach ($arr_tag as $key => $tag) {
+				$queryTagExist = "SELECT * FROM tags Where tag = '{$tag}'";
+				$rstTagExist = mysqli_query($cnt,$queryTagExist);
 
-						if(mysqli_num_rows($rstTagExist) > 0) {
-							$queryTagRecup = "SELECT tags.id AS tid FROM tags Where tag = '{$tag}'";
-							$rst = mysqli_query($cnt, $queryTagRecup);
-							while($arr = mysqli_fetch_array($rst)) {
-								$queryTagRel = "INSERT INTO posts_tags (post_id, tag_id, cat_id) VALUES ('{$post_id}', '{$arr['tid']}', '{$cat_id}')";
-								$rstTagRel = mysqli_query($cnt, $queryTagRel);
-							}
-						}
-						else {
-							$queryTagName = "INSERT INTO tags (id, tag, url, status) VALUES (NULL, '{$tag}', '".slugify($tag)."', 1)";
-							if (mysqli_query($cnt, $queryTagName)) {
-								$tag_id = mysqli_insert_id($cnt);
-								$queryTagRel = "INSERT INTO posts_tags (post_id, tag_id, cat_id) VALUES ('{$post_id}', '{$tag_id}', '{$cat_id}')";
-								$rstTagRel = mysqli_query($cnt, $queryTagRel);
-							}
-						}
+				if(mysqli_num_rows($rstTagExist) > 0) {
+					$queryTagRecup = "SELECT tags.id AS tid FROM tags Where tag = '{$tag}'";
+					$rst = mysqli_query($cnt, $queryTagRecup);
+					while($arr = mysqli_fetch_array($rst)) {
+						$tag_id = $arr['tid'];
+						echo $post_id . '<br/>';
+						echo $tag_id . '<br/>';
+						$queryTagRel = "INSERT INTO posts_tags (post_id, tag_id) VALUES ('{$post_id}', '{$arr['tid']}')";
+						$rstTagRel = mysqli_query($cnt, $queryTagRel);
+					}
+				}
+				else {
+					$queryTagName = "INSERT INTO tags (id, tag, url, status) VALUES (NULL, '{$tag}', '".slugify($tag)."', 1)";
+					if (mysqli_query($cnt, $queryTagName)) {
+						$tag_id = mysqli_insert_id($cnt);
+						$queryTagRel = "INSERT INTO posts_tags (post_id, tag_id) VALUES ('{$post_id}', '{$tag_id}')";
+						$rstTagRel = mysqli_query($cnt, $queryTagRel);
 					}
 				}
 			}

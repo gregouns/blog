@@ -106,34 +106,6 @@ if ( $_POST ) {
 }
 
 
-function buildTree ( $cat_begin = 0 ) {
-  global $cnt;
-
-  if ($cat_begin > 0) {
-    $query = "SELECT * FROM categories WHERE id_parent = '{$cat_begin}' ORDER BY name ASC";
-
-  }
-  else {
-    $query = "SELECT * FROM categories WHERE id_parent = 0 ORDER BY name ASC";
-  }
-  $rst = mysqli_query($cnt,$query);
-
-  if (mysqli_num_rows($rst) > 0) {
-    while ($arr = mysqli_fetch_array($rst)) {
-      $cat[slugify($arr['name'])] = array(
-        'id'        => $arr['id'],
-        'name'      => $arr['name'],
-        'children' => buildTree($arr['id']),
-      );
-    }
-  }
-  else {
-    return array();
-  }
-
-  return $cat;
-}
-
 $arr_tree = buildTree();
 
 print_r($arr_tree);

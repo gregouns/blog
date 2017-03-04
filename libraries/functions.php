@@ -21,4 +21,40 @@ function slugify($string, $replace = array(), $delimiter = '-') {
   return $clean;
 }
 
+
+function toUL ($arr, $pass = 0) {
+  $html = '<ul>' . PHP_EOL;
+  foreach ( $arr as $v ) {
+    $html.= '<li>';
+    $html .= str_repeat("--", $pass); // use the $pass value to create the --
+    $html .= $v['name'] . '</li>' . PHP_EOL;
+
+    if ( array_key_exists('children', $v) ) {
+      $html.= toUL($v['children'], $pass+1);
+    }
+  }
+  $html.= '</ul>' . PHP_EOL;
+
+  return $html;
+}
+
+function toSELECT ($arr, $pass = 0) {
+  $html = '';
+  if ($pass == 0) {
+    $html = '<select name="category_parent">' . PHP_EOL;
+  }
+  foreach ( $arr as $v ) {
+    $html .= '<option value="'.$v['id'].'">';
+    $html .= str_repeat("--> ", $pass); // use the $pass value to create the --
+    $html .= $v['name'] . '</option>' . PHP_EOL;
+
+    if ( array_key_exists('children', $v) ) {
+      $html .= toSELECT($v['children'], $pass+1);
+    }
+  }
+  if ($pass == 0) $html.= '</select>' . PHP_EOL;
+
+  return $html;
+}
+
 ?>

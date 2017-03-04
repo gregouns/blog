@@ -21,7 +21,7 @@ function afficher_menu($id_parent, $array) {
 			$html .= '<option id ="'.$lien['id'].'">' . $lien['category'] . '</option>';
 			$html .= afficher_menu($lien['id'], $array);
 		}
-	}	 
-	return $html; 
+	}
+	return $html;
 }
 echo afficher_menu(0, $cat);

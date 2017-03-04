@@ -47,13 +47,13 @@ if ( $_POST ) {
 					$message = '<div class="alert alert-info">Votre sous catégorie a bien été inséré</div>';
 					echo $message;
 				}
-			}	
+			}
 			if ( isset($Scat) && strlen($Scat) == 0 ) {
 				// condition si la personne n a pas choisi de sous menu
 				$message = '<div class="alert alert-success">Votre menu a bien été inséré</div>';
 				echo $message;
 			}
-			else { 
+			else {
 				$query_Scat_exist = "SELECT * FROM categories Where name = '{$Scat}'";
 				$rst_Scat_exist = mysqli_query($cnt,$query_Scat_exist);
 				if(mysqli_num_rows($rst_Scat_exist) == 0) {
@@ -61,14 +61,14 @@ if ( $_POST ) {
 					$query_cat_recup = "SELECT id FROM categories Where name = '{$cat}'";
 					$rst__cat_recup = mysqli_query($cnt, $query_cat_recup);
 					while ($arr = mysqli_fetch_array($rst__cat_recup)) {
-						$query_Scat_insert = "INSERT INTO categories (id,id_parent,name,url,status) 
+						$query_Scat_insert = "INSERT INTO categories (id,id_parent,name,url,status)
 							VALUES (NULL,'{$arr['id']}','{$Scat}','".slugify($Scat)."',1)";
 						$rst_Scat = mysqli_query($cnt, $query_Scat_insert);
 						$message = '<div class="alert alert-info">Votre sous menu a bien été inséré</div>';
 						echo $message;
 					}
 				}
-			}	
+			}
 		}
 		// condition 1er menu n' existe pas
 		else {
@@ -86,14 +86,14 @@ if ( $_POST ) {
 				if(mysqli_num_rows($rst_Scat_exist) > 0) {
 					$message = '<div class="alert-warning">votre menu appartient déjà a un menu</div>';
 					echo $message;
-				}					
-				else { 
+				}
+				else {
 					// recherche id du parent crée
 					$query_cat_select = "SELECT id FROM categories Where name ='{$cat}'";
 					$rst_cat_select = mysqli_query($cnt,$query_cat_select);
 					// creation d un nouveau sous menu
 					while ($arr = mysqli_fetch_array($rst_cat_select)) {
-					$query_Scat_insert = "INSERT INTO categories (id,id_parent,name,url,status) 
+					$query_Scat_insert = "INSERT INTO categories (id,id_parent,name,url,status)
 						VALUES (NULL,'{$arr['id']}','{$Scat}','".slugify($Scat)."',1)";
 					$rst_Scat = mysqli_query($cnt, $query_Scat_insert);
 					$message = '<div class="alert alert-info">votre sous menu a bien été inséré</div>';
@@ -101,11 +101,60 @@ if ( $_POST ) {
 					}
 				}
 			}
-		}	
+		}
 	}
 }
 
+
+function buildTree ( $cat = array(), $cat_begin = 0 ) {
+  global $cnt;
+
+  if ($cat_begin > 0) {
+    $query = "SELECT * FROM categories WHERE id_parent = '{$cat_begin}' ORDER BY name ASC";
+
+  }
+  else {
+    $query = "SELECT * FROM categories WHERE id_parent = 0 ORDER BY name ASC";
+  }
+  $rst = mysqli_query($cnt,$query);
+
+  if (mysqli_num_rows($rst) > 0) {
+    while ($arr = mysqli_fetch_array($rst)) {
+      $cat[$arr['id']] = array(
+        'id'        => $arr['id'],
+        'name'      => $arr['name'],
+        'children' => buildTree($cat, $arr['id']),
+      );
+    }
+  }
+  else {
+    return array();
+  }
+
+  return $cat;
+}
+
+$arr_tree = buildTree();
+
+print_r($arr_tree);
+echo '<hr />';
+echo toUL($arr_tree);
+echo '<hr />';
 ?>
+
+<form>
+  <div class="form-group">
+    <label>Catgeory name</label>
+    <input type="text" name="category" value="" placeholder="Enter your category" />
+  </div>
+  <div class="form-group">
+    <label>Category parente</label>
+    <?php echo toSELECT($arr_tree); ?>
+  </div>
+</form>
+
+<br /><br />
+
 <form method="post" action="/formulaire">
 	<div class="form-group">
 		<label for="cat">catégorie</label>

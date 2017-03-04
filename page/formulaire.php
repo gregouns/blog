@@ -152,7 +152,13 @@ echo '<hr />';
     <div class="form-group">
       <label>Category parente</label>
       <?php echo toSELECT($arr_tree); ?>
+      <p class="help text-warning">
+        <small>Laissez vide si vous souhaitez créer une catégorie parente</small>
+      </p>
     </div>
+    <button class="btn btn-primary">
+      envoyer
+    </button>
   </form>
 </fieldset>
 

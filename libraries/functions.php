@@ -42,6 +42,7 @@ function toSELECT ($arr, $pass = 0) {
   $html = '';
   if ($pass == 0) {
     $html = '<select name="category_parent" class="form-control">' . PHP_EOL;
+    $html .= '<option value="-1">Sélectionnez</option>';
   }
   foreach ( $arr as $v ) {
     $html .= '<option value="'.$v['id'].'">';

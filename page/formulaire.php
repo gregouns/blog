@@ -106,7 +106,7 @@ if ( $_POST ) {
 }
 
 
-function buildTree ( $cat = array(), $cat_begin = 0 ) {
+function buildTree ( $cat_begin = 0 ) {
   global $cnt;
 
   if ($cat_begin > 0) {
@@ -120,10 +120,10 @@ function buildTree ( $cat = array(), $cat_begin = 0 ) {
 
   if (mysqli_num_rows($rst) > 0) {
     while ($arr = mysqli_fetch_array($rst)) {
-      $cat[$arr['id']] = array(
+      $cat[slugify($arr['name'])] = array(
         'id'        => $arr['id'],
         'name'      => $arr['name'],
-        'children' => buildTree($cat, $arr['id']),
+        'children' => buildTree($arr['id']),
       );
     }
   }
@@ -142,27 +142,33 @@ echo toUL($arr_tree);
 echo '<hr />';
 ?>
 
-<form>
-  <div class="form-group">
-    <label>Catgeory name</label>
-    <input type="text" name="category" value="" placeholder="Enter your category" />
-  </div>
-  <div class="form-group">
-    <label>Category parente</label>
-    <?php echo toSELECT($arr_tree); ?>
-  </div>
-</form>
+<fieldset>
+  <legend>duke form</legend>
+  <form>
+    <div class="form-group">
+      <label>Catgeory name</label>
+      <input type="text" class="form-control" name="category" value="" placeholder="Enter your category" />
+    </div>
+    <div class="form-group">
+      <label>Category parente</label>
+      <?php echo toSELECT($arr_tree); ?>
+    </div>
+  </form>
+</fieldset>
 
 <br /><br />
 
-<form method="post" action="/formulaire">
-	<div class="form-group">
-		<label for="cat">catégorie</label>
-		<input id="cat" class="form-control" name="cat" type="text" placeholder = "ajoutez une catégorie" value="<?php if (isset($_POST['cat'])) {echo $_POST['cat'];}?>" />
-	</div>
-	<div class="form-group">
-		<label for="Scat">sous catégorie</label>
-		<input id="Scat" class="form-control" name="Scat" type="text" placeholder = "ajoutez une sous catégorie" value="<?php if (isset($_POST['Scat'])) {echo $_POST['Scat'];}?>" />
-	</div>
-	<button>envoyer</button>
-</form>
+<fieldset>
+  <legend>greg form</legend>
+  <form method="post" action="/formulaire">
+  	<div class="form-group">
+  		<label for="cat">catégorie</label>
+  		<input id="cat" class="form-control" name="cat" type="text" placeholder = "ajoutez une catégorie" value="<?php if (isset($_POST['cat'])) {echo $_POST['cat'];}?>" />
+  	</div>
+  	<div class="form-group">
+  		<label for="Scat">sous catégorie</label>
+  		<input id="Scat" class="form-control" name="Scat" type="text" placeholder = "ajoutez une sous catégorie" value="<?php if (isset($_POST['Scat'])) {echo $_POST['Scat'];}?>" />
+  	</div>
+  	<button>envoyer</button>
+  </form>
+</fieldset>

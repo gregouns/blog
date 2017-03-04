@@ -41,11 +41,11 @@ function toUL ($arr, $pass = 0) {
 function toSELECT ($arr, $pass = 0) {
   $html = '';
   if ($pass == 0) {
-    $html = '<select name="category_parent">' . PHP_EOL;
+    $html = '<select name="category_parent" class="form-control">' . PHP_EOL;
   }
   foreach ( $arr as $v ) {
     $html .= '<option value="'.$v['id'].'">';
-    $html .= str_repeat("--> ", $pass); // use the $pass value to create the --
+    $html .= str_repeat("--", $pass); // use the $pass value to create the --
     $html .= $v['name'] . '</option>' . PHP_EOL;
 
     if ( array_key_exists('children', $v) ) {

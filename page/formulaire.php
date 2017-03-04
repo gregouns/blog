@@ -143,7 +143,7 @@ echo '<hr />';
 ?>
 
 <fieldset>
-  <legend>duke form</legend>
+  <legend>duke form <small>(n'ajoute pas encore les categories juste une affichage)</small></legend>
   <form>
     <div class="form-group">
       <label>Catgeory name</label>

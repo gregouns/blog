@@ -21,14 +21,22 @@ function slugify($string, $replace = array(), $delimiter = '-') {
   return $clean;
 }
 
+function isCategoryExists ($cat, $parent_id = 0) {
+  global $cnt;
+  $query = "SELECT * FROM categories WHERE name = '{$cat}' AND id_parent = '{$parent_id}' LIMIT 1";
+  $rst = mysqli_query($cnt,$query);
+  if (mysqli_num_rows($rst) > 0) {
+    $arr = mysqli_fetch_array($rst);
+    return $arr['id'];
+  }
+  return false;
+}
 
-
-function buildTree ( $cat_begin = 0 ) {
+function buildTree ($cat_begin = 0) {
   global $cnt;
 
   if ($cat_begin > 0) {
     $query = "SELECT * FROM categories WHERE id_parent = '{$cat_begin}' ORDER BY name ASC";
-
   }
   else {
     $query = "SELECT * FROM categories WHERE id_parent = 0 ORDER BY name ASC";

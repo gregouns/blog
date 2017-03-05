@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Slugify - Transform a string to an url friendly word
+ * @param  string $string
+ * @param  array  $replace
+ * @return string
+ */
 function slugify($string, $replace = array(), $delimiter = '-') {
   // https://github.com/phalcon/incubator/blob/master/Library/Phalcon/Utils/Slug.php
   if (!extension_loaded('iconv')) {
@@ -21,6 +26,12 @@ function slugify($string, $replace = array(), $delimiter = '-') {
   return $clean;
 }
 
+/**
+ * isCategoryExists Check if category exists
+ * @param  string  $cat
+ * @param  integer $parent_id
+ * @return boolean or id
+ */
 function isCategoryExists ($cat, $parent_id = 0) {
   global $cnt;
   $query = "SELECT * FROM categories WHERE name = '{$cat}' AND id_parent = '{$parent_id}' LIMIT 1";
@@ -32,6 +43,11 @@ function isCategoryExists ($cat, $parent_id = 0) {
   return false;
 }
 
+/**
+ * buildTree - To construct a multidimensional array for categories
+ * @param  integer $cat_begin
+ * @return array
+ */
 function buildTree ($cat_begin = 0) {
   global $cnt;
 
@@ -59,7 +75,12 @@ function buildTree ($cat_begin = 0) {
   return $cat;
 }
 
-
+/**
+ * toUL - Generate a ul+li of categories
+ * @param  array  $arr of categories
+ * @param  integer $pass
+ * @return string HTML
+ */
 function toUL ($arr, $pass = 0) {
   $html = '<ul>' . PHP_EOL;
   foreach ( $arr as $v ) {
@@ -76,6 +97,13 @@ function toUL ($arr, $pass = 0) {
   return $html;
 }
 
+/**
+ * toSELECT - Generate a select+option form of categories
+ * @param  array  $arr
+ * @param  integer $pass
+ * @param  string  $nameSelect
+ * @return string HTML
+ */
 function toSELECT ($arr, $pass = 0, $nameSelect = 'category_parent') {
   $html = '';
   if ($pass == 0) {

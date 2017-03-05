@@ -76,10 +76,10 @@ function toUL ($arr, $pass = 0) {
   return $html;
 }
 
-function toSELECT ($arr, $pass = 0) {
+function toSELECT ($arr, $pass = 0, $nameSelect = 'category_parent') {
   $html = '';
   if ($pass == 0) {
-    $html = '<select name="category_parent" class="form-control">' . PHP_EOL;
+    $html = '<select name="'.$nameSelect.'" class="form-control">' . PHP_EOL;
     $html .= '<option value="-1">Sélectionnez</option>';
   }
   foreach ( $arr as $v ) {

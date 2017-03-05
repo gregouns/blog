@@ -25,7 +25,7 @@ $arr_cat = '';
 if(isset($_POST['submit'])) {
 	if(isset($_POST['catego'])) {
 		if($_POST['catego'] > 0){
-			$arr_cat = $_POST['catego'];	
+			$arr_cat = $_POST['catego'];
 		}
 	}
 }
@@ -48,12 +48,12 @@ if ( $_POST ) {
 		$_POST['title'] = strip_tags($_POST['title']);
 		$_POST['description'] = strip_tags($_POST['description']);
 		// $flagpost = true;
-		$query = "INSERT INTO 
-			posts (`id`, `title`, `url`,`date`, `description`, `status`) 
+		$query = "INSERT INTO
+			posts (`id`, `title`, `url`,`date`, `description`, `status`)
 			VALUES (
 			NULL,
 			'{$_POST['title']}',
-			'".slugify($title)."',	
+			'".slugify($title)."',
 			'{$_POST['date']}',
 			'{$_POST['description']}',
 			1
@@ -69,7 +69,7 @@ if ( $_POST ) {
 						$rst_insert_cat = mysqli_query($cnt,$query_insert_cat);
 					}
 				}
-			
+
 				foreach ($arr_tag as $key => $tag) {
 					$queryTagExist = "SELECT * FROM tags Where tag = '{$tag}'";
 					$rstTagExist = mysqli_query($cnt,$queryTagExist);
@@ -98,7 +98,7 @@ if ( $_POST ) {
 		}
 		else {
 				$message = '<div class="alert alert-danger">Un problème est survenu, veuillez contacter le webmaster</div>';
-		}		
+		}
 	}
 	else {
 		$message = '<div class="alert alert-warning">Veuillez remplir tous les champs : <ul>';
@@ -108,7 +108,7 @@ if ( $_POST ) {
 		$message .= '</ul></div>';
 	}
 }
-
+$arr_tree = buildTree();
 ?>
 
 <?php echo $message ?>
@@ -129,13 +129,41 @@ if ( $_POST ) {
 		<label for="tag">define your tags</label>
 		<input id="tag" class="form-control" name="tag" type="text" value="<?php if (isset($_POST['tag'])) {echo $_POST['tag'];}?>" />
 	</div>
-	<div class="form-group">
-		<label for="catego">choose your categories</label>
-		<select name="catego[]" class="selectpicker" multiple>
-			<?php
-				include 'arborescence.php';
-			?>		
-		</select>
-	</div>
-	<button type="submit" name="submit" id="button" value="submit" >submit</button>
+  <div class="input-group">
+    <?php echo toSELECT($arr_tree, 0, 'category_parent[]'); ?>
+    <span class="input-group-btn">
+      <button type="button" class="plus btn btn-success">
+        <i class="glyphicon glyphicon-plus"></i>
+      </button>
+      <button type="button" class="minus btn btn-danger" disabled="disabled">
+        <i class="glyphicon glyphicon-minus"></i>
+      </button>
+    </span>
+  </div>
+  <div id="anotherCategory"></div>
+
+  <div class="clearfix"></div>
+  <br />
+	<button type="submit" name="submit" id="button" value="submit"  class="btn btn-primary">
+    submit
+  </button>
 </form>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    $(document).on('click', '.plus', function(e) {
+      e.preventDefault();
+      var el = $(e.currentTarget);
+      var clone = el.parent().parent().clone();
+
+      $('#anotherCategory').append(clone);
+      console.log($('#anotherCategory').find('.minus'));
+      $('#anotherCategory').find('.minus').prop("disabled", false);
+    });
+    $(document).on('click', '.minus', function(e) {
+      e.preventDefault();
+      var el = $(e.currentTarget);
+      el.parent().parent().remove();
+    });
+  });
+</script>

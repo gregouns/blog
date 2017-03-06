@@ -19,6 +19,6 @@
 	while($arr = mysqli_fetch_array($rst)) {
 		echo 'tag: <a href = "/tags/'.$arr['url'].'">' . $arr['tag'] . '</a><br/>';
 		echo 'post: <a style="color:orange;" href = "/post/'.$arr['purl'].'">' . $arr['title'] . '</a><br/>';
-		echo 'description: ' . $arr['description'];
+		echo 'description: ' . $arr['description'] . '<br/>';
 		echo 'date: ' . $arr['date'] . '<br/>';
 	}

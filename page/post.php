@@ -19,11 +19,11 @@ $tag = '';
 if(isset($_POST['tag'])) {
 	$tag     = $_POST['tag'];
 	$tag     = addslashes(strip_tags(trim($tag)));
-	$tag_url = slugify($tag);
 	$arr_tag = array();
 	if ($tag != '') {
 		$arr_tag = explode(',', $tag);
 	}
+	
 }
 $arr_cat = '';
 if(isset($_POST['submit'])) {
@@ -67,7 +67,11 @@ if ( $_POST ) {
 				$query_cat;
 				$rst_cat = mysqli_query($cnt,$query_cat);
 				while ($arr2 = mysqli_fetch_array($rst_cat)) {
-					$query_insert_cat = "INSERT INTO posts_cats (post_id, cat_id) VALUES ('{$post_id}', '{$cat_id}')";
+					$query_insert_cat = "INSERT INTO 
+						posts_cats (post_id, cat_id) 
+						VALUES (
+						'{$post_id}',
+						'{$cat_id}')";
 					$rst_insert_cat = mysqli_query($cnt,$query_insert_cat);
 				}
 			}
@@ -79,15 +83,29 @@ if ( $_POST ) {
 					$rst = mysqli_query($cnt, $queryTagRecup);
 					while($arr = mysqli_fetch_array($rst)) {
 						$tag_id = $arr['tid'];
-						$queryTagRel = "INSERT INTO posts_tags (post_id, tag_id) VALUES ('{$post_id}', '{$arr['tid']}')";
+						$queryTagRel = "INSERT INTO 
+							posts_tags (post_id, tag_id) 
+							VALUES (
+							'{$post_id}',
+							'{$arr['tid']}')";
 						$rstTagRel = mysqli_query($cnt, $queryTagRel);
 					}
 				}
 				else {
-					$queryTagName = "INSERT INTO tags (id, tag, url, status) VALUES (NULL, '{$tag}', '{$tag_url}', 1)";
+					$queryTagName = "INSERT INTO 
+						tags (id, tag, url, status) 
+						VALUES (
+						NULL,
+						 '{$tag}',
+						  '".slugify($tag)."',
+						   1)";
 					if (mysqli_query($cnt, $queryTagName)) {
 						$tag_id = mysqli_insert_id($cnt);
-						$queryTagRel = "INSERT INTO posts_tags (post_id, tag_id) VALUES ('{$post_id}', '{$tag_id}')";
+						$queryTagRel = "INSERT INTO 
+							posts_tags (post_id, tag_id) 
+							VALUES (
+							'{$post_id}',
+							'{$tag_id}')";
 						$rstTagRel = mysqli_query($cnt, $queryTagRel);
 					}
 				}		

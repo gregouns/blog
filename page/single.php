@@ -14,13 +14,15 @@
 			echo 'Date: ' . date('D j M Y', $arr['timestamp']) . '<br />';
 			$query2 = "SELECT * FROM tags AS t,posts_tags AS pt WHERE pt.post_id = '{$arr['id']}'AND pt.tag_id = t.id";
 			$rst2 = mysqli_query($cnt2,$query2);
+			echo 'tag: ';
 			while($arr2 = mysqli_fetch_array($rst2)) {
-				echo 'tag: <a href = "/tags/'.$arr2['url'].'">' . $arr2['tag'] . '</a><br />';
+				echo '<a href = "/tags/'.$arr2['url'].'">' . $arr2['tag'] . '</a>,';
 			}
 			$query3 = "SELECT * FROM categories AS c,posts_cats AS pc WHERE pc.post_id = '{$arr['id']}'AND pc.cat_id = c.id";
 			$rst3 = mysqli_query($cnt3,$query3);
+			echo '<br/>categorie: ';
 			while($arr3 = mysqli_fetch_array($rst3)) {
-			echo 'categorie:<a style="color:green;" href = "/categorie/'.$arr3['url'].'">' . $arr3['name'] . '</a><br/>';
+			echo '<a style="color:green;" href = "/categorie/'.$arr3['url'].'">' . $arr3['name'] . '</a>,';
 			}
 		}
 

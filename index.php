@@ -26,20 +26,25 @@ if (isset($_GET['page'])) {
 			break;
 
 		case 'tags':
-			$page = '/page/tags.php';
+			$page  = '/page/tags.php';
 			$title = "tags";
 			break;
 
 		case 'formulaire':
-			$page = '/page/formulaire.php';
+			$page  = '/page/formulaire.php';
 			$title = "formulaire";
 			break;
 
 		case 'categorie':
-			$page = '/page/categorie.php';
+			$page  = '/page/categorie.php';
 			$title = "categorie";
 			break;
 
+		case 'edit':
+			$page  = '/page/edit.php';
+			$title = "edit";
+			break;
+			
 		default:
 			$title = "Erreur";
 			$page  = '/page/erreur404.php';

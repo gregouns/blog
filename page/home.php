@@ -29,6 +29,7 @@
 			while($arr3 = mysqli_fetch_array($rst3)) {
 				echo '<a style="color:green;" href = "/categorie/'.$arr3['curl'].'">' . $arr3['name'] . '</a>,';
 			}
+			echo '<br/><a href = "/edit/'.$arr['url'].'">modifier votre post</a>';
 			echo '<br/><br/>';
 		}
 

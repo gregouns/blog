@@ -55,7 +55,7 @@ if ( $_POST ) {
 			VALUES (
 			NULL,
 			'{$title}',
-			'${title_url}',
+			'{$title_url}',
 			'{$date}',
 			'{$description}',
 			1

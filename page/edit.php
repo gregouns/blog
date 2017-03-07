@@ -16,7 +16,6 @@ $cnt3 = mysqli_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
 mysqli_query($cnt3, "SET NAMES 'utf8'");
 
 $id = $_GET['edit'];
-var_dump($id);
 
 $query = "SELECT * FROM posts AS p WHERE id = $id";
 $rst = mysqli_query($cnt, $query);

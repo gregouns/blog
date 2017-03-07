@@ -17,13 +17,15 @@ mysqli_query($cnt3, "SET NAMES 'utf8'");
 
 $id = $_GET['edit'];
 
-$query = "SELECT * FROM posts AS p WHERE id = $id";
+$query = "SELECT *, DATE_FORMAT(date,'%y-%m-%d') FROM posts AS p WHERE id = $id";
+var_dump($query);
 $rst = mysqli_query($cnt, $query);
 while($arr = mysqli_fetch_array($rst)) {
-	$query2 = "SELECT * FROM tags AS t, posts_tags AS pt WHERE pt.post_id = '{$arr['id']}' AND t.id = pt.tag_id";
+	var_dump($arr['date']);
+	$query2 = "SELECT GROUP_CONCAT(`tag` SEPARATOR ',') AS `tag` FROM tags AS t, posts_tags AS pt WHERE pt.post_id = '{$arr['id']}' AND t.id = pt.tag_id";
 	$rst2 = mysqli_query($cnt2, $query2);
 	while($arr2 = mysqli_fetch_array($rst2)) {
-		$query3 = "SELECT * FROM categories AS c, posts_cats AS pc WHERE pc.post_id = '{$arr['id']}' AND c.id = pc.cat_id";
+		$query3 = "SELECT GROUP_CONCAT(`name` SEPARATOR ',') AS name FROM categories AS c, posts_cats AS pc WHERE pc.post_id = '{$arr['id']}' AND c.id = pc.cat_id";
 		$rst3 = mysqli_query($cnt3, $query3);
 		while($arr3 = mysqli_fetch_array($rst3)) {
 			echo '<form method="post" action="/post">
@@ -42,6 +44,10 @@ while($arr = mysqli_fetch_array($rst)) {
 					<div class="form-group">
 						<label for="tag">tag</label>
 						<input id="tag" class="form-control" name="tag" type="text" value="'.$arr2['tag'] . '" />
+					</div>
+					<div class="form-group">
+						<label for="category_parent">catégorie</label>
+						<input id="category_parent" class="form-control" name="category_parent" type="text" value="'.$arr3['name'] . '" />
 					</div>
 
 					<button type="submit" name="submit" id="button" value="submit"  class="btn btn-primary">

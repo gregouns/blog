@@ -20,7 +20,7 @@
 			
 			echo 'tag: ';
 			while($arr2 = mysqli_fetch_array($rst2)) {
-				echo  '<a href = "/tags/'.$arr2['turl'].'">' . $arr2['tag'] . '</a>,';
+				echo '<a href = "/tags/'.$arr2['turl'].'">' . $arr2['tag'] . '</a>';
 			}
 			$query3 = "SELECT * ,c.url AS curl FROM categories AS c,posts_cats AS pc 
 				WHERE pc.post_id = '{$arr['id']}' AND pc.cat_id = c.id";
@@ -29,7 +29,7 @@
 			while($arr3 = mysqli_fetch_array($rst3)) {
 				echo '<a style="color:green;" href = "/categorie/'.$arr3['curl'].'">' . $arr3['name'] . '</a>,';
 			}
-			echo '<br/><br/>';	
+			echo '<br/><br/>';
 		}
 
 ?>

@@ -95,11 +95,11 @@ function toUL ($arr, $pass = 0) {
  * @param  string  $nameSelect
  * @return string HTML
  */
-function toSELECT ($arr, $pass = 0, $nameSelect = 'category_parent') {
+function toSELECT ($arr, $pass = 0, $nameSelect = 'category_parent' , $name ='Sélectionnez') {
   $html = '';
   if ($pass == 0) {
     $html = '<select name="'.$nameSelect.'" class="form-control">' . PHP_EOL;
-    $html .= '<option value="-1">Sélectionnez</option>';
+    $html .= '<option value="-1">'.$name.'</option>';
   }
   foreach ( $arr as $v ) {
     $html .= '<option value="'.$v['id'].'">';

@@ -4,26 +4,8 @@ $cnt2 = mysqli_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
 mysqli_query($cnt2, "SET NAMES 'utf8'");
 $cnt3 = mysqli_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
 mysqli_query($cnt3, "SET NAMES 'utf8'");
-
+$html2 = "";
 $id = $_GET['edit'];
-
-function toSELECTEdit ($arr, $pass = 0, $nameSelect = 'category_parent',$arr3 ='' ) {
-  $html = '';
-  if ($pass == 0) {
-    $html = '<select name="'.$nameSelect.'" class="form-control">' . PHP_EOL;
-    $html .= '<option value="-1">' . $arr3 . '</option>';
-  }
-  foreach ( $arr as $v ) {
-    $html .= '<option value="'.$v['id'].'">';
-    $html .= str_repeat("--", $pass); // use the $pass value to create the --
-    $html .= $v['name'] . '</option>' . PHP_EOL;
-    if ( array_key_exists('children', $v) ) {
-      $html .= toSELECT($v['children'], $pass+1);
-    }
-  }
-  if ($pass == 0) $html.= '</select>' . PHP_EOL;
-  return $html;
-}
 
 if (isset($_POST['update'])) {
 	$title = $_POST['title'];
@@ -60,7 +42,7 @@ if ($rst = mysqli_query($cnt, $query)) {
 			while($arr3 = mysqli_fetch_array($rst3)) {
 				$arr_tree = buildTree();
 				$arr['date'] = substr($arr['date'], 0,10);
-				echo   '<form method="post" action="/edit/'.$id.'">
+				$html = '<form method="post" action="/edit/'.$id.'">
 							<div class="form-group">
 								<label for="titre">titre</label>
 								<input id="titre" class="form-control" name="title" type="text" value="'.$arr['title'] . '" />
@@ -76,25 +58,24 @@ if ($rst = mysqli_query($cnt, $query)) {
 							<div class="form-group">
 								<label for="tag">tag</label>
 								<input id="tag" class="form-control" name="tag" type="text" value="'.$arr2['tag'] . '" />
+							</div>';
+		    					$html2 .= '<div class="input-group">'. toSELECT($arr_tree, 0, 'category_parent[]' , $arr3['name'])
+								. '	<span class="input-group-btn">
+								      	<button type="button" class="plus btn btn-success">
+								        	<i class="glyphicon glyphicon-plus"></i>
+								      	</button>
+								      	<button type="button" class="minus btn btn-danger" disabled="disabled">
+								        	<i class="glyphicon glyphicon-minus"></i>
+								      	</button>
+									</span>
 							</div>
-							<div class="input-group">';
-		    					echo toSELECTEdit($arr_tree, 0, 'category_parent[]' , $arr3['name']);
-								echo '	<span class="input-group-btn">
-									      	<button type="button" class="plus btn btn-success">
-									        	<i class="glyphicon glyphicon-plus"></i>
-									      	</button>
-									      	<button type="button" class="minus btn btn-danger" disabled="disabled">
-									        	<i class="glyphicon glyphicon-minus"></i>
-									      	</button>
-									    </span>
-							</div>
-							<div id="anotherCategory"></div>
+							<div id="anotherCategory"></div>';
 
-							<div class="clearfix"></div>
+							$html3 = '<div class="clearfix"></div>
 							<br />
 							<button type="submit" name="update" id="button" value="submit"  class="btn btn-primary">
-						    submit
-						  	</button>
+						    	submit
+						   	</button>
 						</form>';
 						echo `<script type="text/javascript">
 					  		$(document).ready(function() {
@@ -116,6 +97,10 @@ if ($rst = mysqli_query($cnt, $query)) {
 			}
 		}
 	}
+	echo $html;
+	echo $html2;
+	echo $html3;
+
 	echo $message = '<div class="alert alert-success">Votre post a bien été modifié</div>';
 }
 else {

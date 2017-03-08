@@ -59,7 +59,7 @@ if ($rst = mysqli_query($cnt, $query)) {
 								<label for="tag">tag</label>
 								<input id="tag" class="form-control" name="tag" type="text" value="'.$arr2['tag'] . '" />
 							</div>';
-		    					$html2 .= '<div class="input-group">'. toSELECT($arr_tree, 0, 'category_parent[]' , $arr3['name'])
+		    					$html2 .= '<label for="category">your categories</label><div class="input-group">'. toSELECT($arr_tree, 0, 'category_parent[]' , $arr3['name'])
 								. '	<span class="input-group-btn">
 								      	<button type="button" class="plus btn btn-success">
 								        	<i class="glyphicon glyphicon-plus"></i>

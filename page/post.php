@@ -113,8 +113,7 @@ if ( $_POST ) {
 					}
 				}
 
-			}
-			
+			}	
 			$message = '<div class="alert alert-success">Votre post a bien été inséré</div>';
 		}
 		else {
@@ -150,40 +149,41 @@ $arr_tree = buildTree();
 		<label for="tag">define your tags</label>
 		<input id="tag" class="form-control" name="tag" type="text" value="<?php if (isset($_POST['tag'])) {echo $_POST['tag'];}?>" />
 	</div>
-  <div class="input-group">
-    <?php echo toSELECT($arr_tree, 0, 'category_parent[]'); ?>
-    <span class="input-group-btn">
-      <button type="button" class="plus btn btn-success">
-        <i class="glyphicon glyphicon-plus"></i>
-      </button>
-      <button type="button" class="minus btn btn-danger" disabled="disabled">
-        <i class="glyphicon glyphicon-minus"></i>
-      </button>
-    </span>
-  </div>
-  <div id="anotherCategory"></div>
+ 	<div class="input-group">
+		<label for="category">define your categories</label>
+		<?php echo toSELECT($arr_tree, 0, 'category_parent[]'); ?>
+		<span class="input-group-btn">
+			<button type="button" class="plus btn btn-success">
+				<i class="glyphicon glyphicon-plus"></i>
+			</button>
+			<button type="button" class="minus btn btn-danger" disabled="disabled">
+				<i class="glyphicon glyphicon-minus"></i>
+			</button>
+		</span>
+	</div>
+	<div id="anotherCategory"></div>
 
-  <div class="clearfix"></div>
-  <br />
+	<div class="clearfix"></div>
+	<br />
 	<button type="submit" name="submit" id="button" value="submit"  class="btn btn-primary">
-    submit
-  </button>
+		submit
+	</button>
 </form>
 
 <script type="text/javascript">
-  $(document).ready(function() {
-    $(document).on('click', '.plus', function(e) {
-      e.preventDefault();
-      var el = $(e.currentTarget);
-      var clone = el.parent().parent().clone();
-      $('#anotherCategory').append(clone);
-      console.log($('#anotherCategory').find('.minus'));
-      $('#anotherCategory').find('.minus').prop("disabled", false);
-    });
-    $(document).on('click', '.minus', function(e) {
-      e.preventDefault();
-      var el = $(e.currentTarget);
-      el.parent().parent().remove();
-    });
-  });
+	$(document).ready(function() {
+		$(document).on('click', '.plus', function(e) {
+			e.preventDefault();
+			var el = $(e.currentTarget);
+			var clone = el.parent().parent().clone();
+			$('#anotherCategory').append(clone);
+			console.log($('#anotherCategory').find('.minus'));
+			$('#anotherCategory').find('.minus').prop("disabled", false);
+		});
+		$(document).on('click', '.minus', function(e) {
+			e.preventDefault();
+			var el = $(e.currentTarget);
+			el.parent().parent().remove();
+		});
+	});
 </script>

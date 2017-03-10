@@ -43,6 +43,13 @@ if (isset($_POST)) {
 			),
 		);	
 	}
+	$query = "SELECT * FROM tags AS t,posts_tags AS pt,posts AS p  WHERE p.id = '{$id_edit_post}' AND pt.post_id = p.id AND pt.tag_id = t.id";
+	echo $query;
+	$rst = mysqli_query($cnt,$query);
+	while ($arr = mysqli_fetch_array($rst)) {
+		
+	}
+
 }
 
 function generate($array) {

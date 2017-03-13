@@ -3,11 +3,13 @@
 $id_edit_post = $_GET['edit'];
 
 if (isset($_POST['submit'])) {
+	// update title, description and date
 	$title = $_POST['title'];
 	$title = addslashes(strip_tags(trim($title)));
 	$date  = $_POST['date'];
 	$description = $_POST['description'];
 	$description = addslashes(strip_tags(trim($description)));
+	var_dump($description);
 	$query = "UPDATE posts 
 		SET 
 		`title` = '{$title}',
@@ -15,10 +17,30 @@ if (isset($_POST['submit'])) {
 		`description` = '{$description}',
 		`url` = '".slugify($title)."'
 		";
-		var_dump($query);
 	mysqli_real_escape_string($cnt, $title);
+	$rst = mysqli_query($cnt,$query);	
+	// update tags
+	$tag = $_POST['tag'];
+	$arr_tag = '';
+	foreach ($arr_tag as $tag) {
+	var_dump($tag);
+		$query = "UPDATE tags 
+		SET 
+		`tag` = '{$tag}',
+		`url` = '".slugify($tag)."'
+		";
+		mysqli_real_escape_string($cnt, $tag);
+		$rst = mysqli_query($cnt,$query);
+	}
+	$name = $_POST['name'];
+	$query = "SELECT * FROM categories WHERE name = '{$name}'";
+	var_dump($query);
 	$rst = mysqli_query($cnt,$query);
-
+	$cat_recup__id = mysqli_insert_id($cnt);
+	$query = "UPDATE posts_cats
+	SET
+	`cat_id` = '{$cat_recup__id}'";
+	$rst = mysqli_query($cnt,$query);
 }
 
 if (isset($_POST)) {
@@ -36,48 +58,25 @@ if (isset($_POST)) {
 			'name' => 'date',
 			'type' => 'datetime',
 			'value' => $arr['date']
-			),
-		'description' => array(
-			'name' => 'description',
-			'type' => 'text',
-			'value' => $arr['description']
-			),
-		);	
+			)
+		);
+	$description = $arr['description'];
 	}
 	// select tag
 	$query = "SELECT * FROM tags AS t,posts_tags AS pt,posts AS p  WHERE p.id = '{$id_edit_post}' AND pt.post_id = p.id AND pt.tag_id = t.id";
 	$rst = mysqli_query($cnt,$query);
 	while ($arr = mysqli_fetch_array($rst)) {
-		if (!empty($arr)) {
-			$arr_tag = array(
-				'tag' => array(
-					'name' => 'tag',
-					'type' => 'text',
-					'value' => $arr['tag']
-				)
-			);
-		}
-		else  {
-			$arr['tag'] = 'sélectionnez un tag';
-			$arr_tag = array(
-				'tag' => array(
-					'name' => 'tag',
-					'type' => 'text',
-					'value' => $arr['tag']
-				)
-			);
-		}
+		$tag[] = $arr['tag'];
 	}
 
 	// select categories
 	$query = "SELECT * FROM categories AS c, posts_cats AS pc, posts AS p WHERE p.id = '{$id_edit_post}' AND pc.post_id = p.id AND pc.cat_id = c.id";
-	echo $query;
 	$rst = mysqli_query($cnt,$query);
 	while ($arr = mysqli_fetch_array($rst)) {
+		$name[] = $arr['name'];
 		$arr_tree = buildTree();
 	}
 }
-
 function generate($array) {
 	$html = '';
 	foreach ($array as $val) {
@@ -92,24 +91,56 @@ function generate($array) {
 
 echo '<form method="post" action="/edit/'.$id_edit_post.'">';
 echo generate($arr_post);
-echo generate($arr_tag);
-echo '<div class="input-group">
-		<label for="category">define your categories</label>';
-echo toSELECT($arr_tree, 0, 'category_parent[]',$arr['name']);
-echo '<span class="input-group-btn">
+echo '<div class = "form-group"><label>description</label><br/><textarea class="form-control" name = "description" type = "text">' .$description . ' </textarea><br/></div>';
+if(isset($tag)){
+	$tag = implode(",", $tag);
+	echo '<div class = "form-group"><label>tag</label><br/><input class="form-control" name = "tag[]" type = "text" value = "'.$tag.'" /><br/></div>';
+}
+else {
+	echo '<div class = "form-group"><label>tag</label><br/><input class="form-control" name = "tag[]" type = "text" value = "" /><br/></div>';
+}
+if(isset($name)){
+ 	foreach ($name as $key => $value) {
+		echo '<div class="input-group">
+				<label for="category">define your categories</label>';
+				
+		echo toSELECT($arr_tree, 0, 'category_parent[]',$value);
+		var_dump($value);
+		echo '<span class="input-group-btn">
 			<button type="button" class="plus btn btn-success">
 				<i class="glyphicon glyphicon-plus"></i>
 			</button>
-			<button type="button" class="minus btn btn-danger" disabled="disabled">
+			<button type="button" class="minus btn btn-danger">
 				<i class="glyphicon glyphicon-minus"></i>
 			</button>
 		</span>
 		</div>
-	<div id="anotherCategory"></div>
+		<div id="anotherCategory"></div>
 
-	<div class="clearfix"></div>
-	<br />
-<button type="submit" name="submit" id="button" value="submit"  class="btn btn-primary">
+		<div class="clearfix"></div>
+		<br />';
+	}
+}
+else {
+	echo '<div class="input-group">
+				<label for="category">define your categories</label>';
+		$arr_tree = buildTree();
+		echo toSELECT($arr_tree, 0, 'category_parent[]');
+		echo '<span class="input-group-btn">
+			<button type="button" class="plus btn btn-success">
+				<i class="glyphicon glyphicon-plus"></i>
+			</button>
+			<button type="button" class="minus btn btn-danger">
+				<i class="glyphicon glyphicon-minus"></i>
+			</button>
+		</span>
+		</div>
+		<div id="anotherCategory"></div>
+
+		<div class="clearfix"></div>
+		<br />';
+}
+echo '<button type="submit" name="submit" id="button" value="submit"  class="btn btn-primary">
 		submit
 	</button>';
 echo '</form>';

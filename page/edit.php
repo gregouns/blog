@@ -9,7 +9,6 @@ if (isset($_POST['submit'])) {
 	$date  = $_POST['date'];
 	$description = $_POST['description'];
 	$description = addslashes(strip_tags(trim($description)));
-	var_dump($description);
 	$query = "UPDATE posts 
 		SET 
 		`title` = '{$title}',
@@ -23,24 +22,24 @@ if (isset($_POST['submit'])) {
 	$tag = $_POST['tag'];
 	var_dump($tag);
 	foreach ($tag as $val) {
-	
 		$query = "UPDATE tags 
 		SET 
 		`tag` = '{$val}',
 		`url` = '".slugify($val)."'
 		";
-		mysqli_real_escape_string($cnt, $val);
 		$rst = mysqli_query($cnt,$query);
 	}
-	$name = $_POST['name'];
-	$query = "SELECT * FROM categories WHERE name = '{$name}'";
-	var_dump($query);
-	$rst = mysqli_query($cnt,$query);
-	$cat_recup__id = mysqli_insert_id($cnt);
-	$query = "UPDATE posts_cats
-	SET
-	`cat_id` = '{$cat_recup__id}'";
-	$rst = mysqli_query($cnt,$query);
+	if(isset($_POST['category_parent'])) {
+		if($_POST['category_parent'] > 0){
+			$arr_cat = $_POST['category_parent'];
+		}
+	}
+	foreach ($arr_cat as $key => $cat_id) {
+		$query = "UPDATE posts_cats
+		SET
+		`cat_id` = '{$cat_id}'";
+		$rst = mysqli_query($cnt,$query);
+	}
 }
 
 if (isset($_POST)) {
@@ -105,7 +104,6 @@ if(isset($name)){
 				<label for="category">define your categories</label>';
 				
 		echo toSELECT($arr_tree, 0, 'category_parent[]',$value);
-		var_dump($value);
 		echo '<span class="input-group-btn">
 			<button type="button" class="plus btn btn-success">
 				<i class="glyphicon glyphicon-plus"></i>

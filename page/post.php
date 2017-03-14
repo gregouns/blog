@@ -18,10 +18,37 @@ if (isset($_POST['description'])) {
 $tag = '';
 if(isset($_POST['tag'])) {
 	$tag     = $_POST['tag'];
-	$tag     = addslashes(strip_tags(trim($tag)));
-	$arr_tag = array();
-	if ($tag != '') {
-		$arr_tag = explode(',', $tag);
+	$tag = addslashes($tag);
+	$arr_tag = explode(',',$tag);
+	if (sizeof($arr_tag)>0) {
+		$arr_new_tag = array();
+		$array_forbidden_chars = array(
+			"'", "\"", "!", "?", "\\", "/"
+		);
+		foreach ($arr_tag as $key => $tag) {
+			$good = true;
+			foreach ($array_forbidden_chars as $char) {
+				if (preg_match('/(\\'.$char.')\1{3,}/', stripslashes($tag))) {
+				   // No way he is trying to repeat single quote ... fuck off !
+					$good = false;
+				  	continue;
+				}
+			}
+			if ($good == false) {
+				continue;
+			}
+			else if (strlen($tag) < 3) {
+				// The tag needs to have more than 3 chars
+				continue;
+			}
+			else {
+				$arr_new_tag[] = $tag;
+			}
+		}
+		$arr_new_tag = array_map('cleaner', $arr_new_tag);
+
+		// Reset the correct tag, everything will be fine
+		$_POST['tag'] = implode(',', $arr_new_tag);
 	}
 	
 }
@@ -64,7 +91,6 @@ if ( $_POST ) {
 			$post_id = mysqli_insert_id($cnt);
 			foreach ($arr_cat as $key => $cat_id) {
 				$query_cat = "SELECT id FROM categories WHERE id = '{$cat_id}'";
-				$query_cat;
 				$rst_cat = mysqli_query($cnt,$query_cat);
 				while ($arr2 = mysqli_fetch_array($rst_cat)) {
 					$query_insert_cat = "INSERT INTO 

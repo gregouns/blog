@@ -21,15 +21,15 @@ if (isset($_POST['submit'])) {
 	$rst = mysqli_query($cnt,$query);	
 	// update tags
 	$tag = $_POST['tag'];
-	$arr_tag = '';
-	foreach ($arr_tag as $tag) {
 	var_dump($tag);
+	foreach ($tag as $val) {
+	
 		$query = "UPDATE tags 
 		SET 
-		`tag` = '{$tag}',
-		`url` = '".slugify($tag)."'
+		`tag` = '{$val}',
+		`url` = '".slugify($val)."'
 		";
-		mysqli_real_escape_string($cnt, $tag);
+		mysqli_real_escape_string($cnt, $val);
 		$rst = mysqli_query($cnt,$query);
 	}
 	$name = $_POST['name'];

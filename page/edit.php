@@ -19,8 +19,7 @@ if (isset($_POST['submit'])) {
 	mysqli_real_escape_string($cnt, $title);
 	$rst = mysqli_query($cnt,$query);
 	// update tags
-	$tag = $_POST['tag'];
-	var_dump($tag);
+ 	$tag = $_POST['tag'];
 	foreach ($tag as $val) {
 		$query = "UPDATE tags
 		SET
@@ -28,6 +27,7 @@ if (isset($_POST['submit'])) {
 		`url` = '".slugify($val)."'
 		";
 		$rst = mysqli_query($cnt,$query);
+
 	}
 	if(isset($_POST['category_parent'])) {
 		if($_POST['category_parent'] > 0){
@@ -37,7 +37,8 @@ if (isset($_POST['submit'])) {
 	foreach ($arr_cat as $key => $cat_id) {
 		$query = "UPDATE posts_cats
 		SET
-		`cat_id` = '{$cat_id}'";
+		`cat_id` = '{$cat_id}'
+		WHERE post_id = $id_edit_post";
 		$rst = mysqli_query($cnt,$query);
 	}
 }
@@ -62,17 +63,20 @@ if (isset($_POST)) {
 	$description = $arr['description'];
 	}
 	// select tag
-	$query = "SELECT * FROM tags AS t,posts_tags AS pt,posts AS p  WHERE p.id = '{$id_edit_post}' AND pt.post_id = p.id AND pt.tag_id = t.id";
+	$query = "SELECT *,t.id AS tid FROM tags AS t,posts_tags AS pt,posts AS p  WHERE p.id = '{$id_edit_post}' AND pt.post_id = p.id AND pt.tag_id = t.id";
 	$rst = mysqli_query($cnt,$query);
-	while ($arr = mysqli_fetch_array($rst)) {
+	while ($arr = mysqli_fetch_assoc($rst)) {
 		$tag[] = $arr['tag'];
 	}
 
 	// select categories
-	$query = "SELECT * FROM categories AS c, posts_cats AS pc, posts AS p WHERE p.id = '{$id_edit_post}' AND pc.post_id = p.id AND pc.cat_id = c.id";
+	$query = "SELECT *,pc.post_id AS pcid, p.id AS pid, pc.cat_id AS pccid, c.id AS cid FROM categories AS c, posts_cats AS pc, posts AS p WHERE pc.post_id = '{$id_edit_post}' AND pc.cat_id = c.id";
+	var_dump($query);
 	$rst = mysqli_query($cnt,$query);
 	while ($arr = mysqli_fetch_array($rst)) {
 		$name[] = $arr['name'];
+		$cat_id = $arr['pccid'];
+		var_dump($cat_id);
 		$arr_tree = buildTree();
 	}
 }

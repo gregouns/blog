@@ -102,7 +102,6 @@ if ( $_POST ) {
 				}
 			}
 			foreach ($arr_tag as $key => $tag) {
-				
 					$queryTagExist = "SELECT * FROM tags Where tag = '{$tag}'";
 					$rstTagExist = mysqli_query($cnt,$queryTagExist);
 					if(mysqli_num_rows($rstTagExist) > 0) {

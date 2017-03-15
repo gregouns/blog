@@ -9,21 +9,21 @@ if (isset($_POST['submit'])) {
 	$date  = $_POST['date'];
 	$description = $_POST['description'];
 	$description = addslashes(strip_tags(trim($description)));
-	$query = "UPDATE posts 
-		SET 
+	$query = "UPDATE posts
+		SET
 		`title` = '{$title}',
 		`date`  = '{$date}',
 		`description` = '{$description}',
 		`url` = '".slugify($title)."'
 		";
 	mysqli_real_escape_string($cnt, $title);
-	$rst = mysqli_query($cnt,$query);	
+	$rst = mysqli_query($cnt,$query);
 	// update tags
 	$tag = $_POST['tag'];
 	var_dump($tag);
 	foreach ($tag as $val) {
-		$query = "UPDATE tags 
-		SET 
+		$query = "UPDATE tags
+		SET
 		`tag` = '{$val}',
 		`url` = '".slugify($val)."'
 		";
@@ -88,6 +88,73 @@ function generate($array) {
 }
 
 
+/* ------------------------------------------------------- */
+/* duke */
+/* ------------------------------------------------------- */
+?>
+<script type="text/javascript">
+  function findElementByText(text){
+    // console.log($("div#newtag:contains('"+text+"')"));
+      var jSpot=$("div#newtag:contains('"+text+"')")
+        .filter(function(){ return $(this).children().length === 0;})
+        // .parent();  // because you asked the parent of that element
+
+      return jSpot;
+   }
+  $(document).ready(function() {
+    // Version simple quasiment dupliquée ! Peut etre améliroée !
+    // Mode sale !! mais rapide !
+    $(document).on('click', '.existing_tag', function(e) {
+      e.preventDefault();
+      var el = $(e.currentTarget);
+      var el2 = el.clone();
+      el2.removeClass('existing_tag').addClass('added_tag');
+      el.remove();
+
+      $('#newtag').append(el2);
+      $('#newtag').append(' ');
+    });
+    $(document).on('click', '.added_tag', function(e) {
+      var el = $(e.currentTarget);
+      var el2 = el.clone();
+      el2.removeClass('added_tag').addClass('existing_tag');
+      el.remove();
+
+      $('#alltag').append(el2);
+      $('#alltag').append(' ');
+    });
+    $(document).on('click', '.plustag', function(e) {
+      $('#newtag').append('<a href="#" class="added_tag">'+$('#mynewtag').val()+'</a>');
+      $('#newtag').append(' ');
+      $('#mynewtag').val('');
+    });
+  });
+</script>
+<?php
+
+
+$query = "SELECT * FROM tags";
+$rst = mysqli_query($cnt,$query);
+echo '<hr /><h2>DUKE -- tag</h2><hr /><u>Ajouter des tags parmis les tags existants :</u>';
+echo '<div id="alltag">';
+while ($arr = mysqli_fetch_assoc($rst)) {
+  echo '<a href="#" class="existing_tag" data-id="'.$arr['id'].'">'.$arr['tag'].'</a> ';
+}
+echo '</div>';
+echo '<u>ou ajouter de nouveaux tags :</u>';
+echo '<div class="input-group">
+<span class="input-group-btn"><input type="text" id="mynewtag" placeholder="votre tag" class="form-control" />
+      <button type="button" class="plustag btn btn-success">
+        <i class="glyphicon glyphicon-plus"></i>
+      </button></span></div>';
+echo '<u>Vos tags sélectionnés:</u>';
+echo '<div id="newtag" style="padding: 20px; border:1px solid #ccc; background: #eee;"></div>';
+echo '<hr /><br /><br />';
+/* ------------------------------------------------------- */
+/* end */
+/* ------------------------------------------------------- */
+
+
 echo '<form method="post" action="/edit/'.$id_edit_post.'">';
 echo generate($arr_post);
 echo '<div class = "form-group"><label>description</label><br/><textarea class="form-control" name = "description" type = "text">' .$description . ' </textarea><br/></div>';
@@ -102,7 +169,7 @@ if(isset($name)){
  	foreach ($name as $key => $value) {
 		echo '<div class="input-group">
 				<label for="category">define your categories</label>';
-				
+
 		echo toSELECT($arr_tree, 0, 'category_parent[]',$value);
 		echo '<span class="input-group-btn">
 			<button type="button" class="plus btn btn-success">

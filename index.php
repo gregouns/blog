@@ -44,20 +44,20 @@ if (isset($_GET['page'])) {
 			$page  = '/page/edit.php';
 			$title = "edit";
 			break;
-			
+
 		default:
 			$title = "Erreur";
 			$page  = '/page/erreur404.php';
 			break;
 	}
 }
-else { 
+else {
 	$page  = '/page/home.php';
 	$title = "home";
 	$_GET['page'] = '';
 }
 
-$page = str_replace('/', '\\', $page);
+// $page = str_replace('/', '\\', $page);
 
 $_GLOBALS['page'] = $page;
 

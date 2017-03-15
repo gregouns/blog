@@ -112,4 +112,9 @@ function toSELECT ($arr, $pass = 0, $nameSelect = 'category_parent' , $name ='SÃ
   if ($pass == 0) $html.= '</select>' . PHP_EOL;
   return $html;
 }
+
+function cleaner ($x) {
+  return addslashes(strip_tags(trim($x)));
+}
+
 ?>

@@ -77,7 +77,6 @@ if (isset($_POST['submit'])) {
 
 					// 10. Mettre les tags ID dans un tableau de type arrUpdateTagIds[] = id
 					$arrUpdateTagIds = explode(',', $_POST['tags_ids']);
-					print_r($arrUpdateTagIds);
 					foreach ($arrUpdateTagIds as $id) {
 						$query = "UPDATE posts_tags
 							SET
@@ -89,20 +88,29 @@ if (isset($_POST['submit'])) {
 
 					// 11. Mettre les tags NAMES dans un tableau de type arrUpdateTagNames[] = name
 					$arrUpdateTagNames = explode(',',$tags_names);
-					print_r($arrUpdateTagNames);
 					foreach ($arrUpdateTagNames as $tag) {
-						$query = "INSERT INTO tags
-							(id,
-							tag,
-							url,
-							status)
-							VALUES
-							(NULL,
-							'$tag',
-							'".slugify($tag)."',
-							1)";
-						print_r($query);
-						$rst = mysqli_query($cnt, $query);
+						if($tag != '') {
+							$query = "INSERT IGNORE INTO tags
+								(id,
+								tag,
+								url,
+								status)
+								VALUES
+								(NULL,
+								'$tag',
+								'".slugify($tag)."',
+								1)";
+							if(mysqli_query($cnt, $query)) {
+								$tag_id = mysqli_insert_id($cnt);
+								$query = "INSERT IGNORE INTO posts_tags
+								(post_id,
+								tag_id)
+								VALUES
+								($id_edit_post,
+								$tag_id)";
+								$rst = mysqli_query($cnt, $query);
+							}
+						}
 					}
 					// print_r($arrUpdateTagIds);
 					// print_r($arrUpdateTagNames);
@@ -216,8 +224,8 @@ while ($arr = mysqli_fetch_array($rst)) {
 	</div>
 	<div class="form-group">
 		<label for="tag">Tags ajoutés</label>
-		<input id="tags_ids" type="text" name="tags_ids" />
-		<input id="tags_names" type="text" name="tags_names" />
+		<input id="tags_ids" type="hidden" name="tags_ids" />
+		<input id="tags_names" type="hidden" name="tags_names" />
 		<div id="newtag" style="padding: 20px; border:1px solid #ccc; background: #eee;">
 		<?php 
 			if (count($arr_tags) > 0) {

@@ -56,13 +56,6 @@ if (isset($_POST['submit'])) {
 	$category = $_POST['category_parent'];
 	print_r($category);
 
-	if(true) {
-		echo 'ben oui';
-	}
-	else {
-		echo 'ben non';
-	}
-
 	// 6.4 En cas d'erreur en 6.1 ou 6.2 je renvoi un message d'erreur
 	if ($title != '') {
 		if ($description != '') {
@@ -116,9 +109,25 @@ if (isset($_POST['submit'])) {
 							}
 						}
 					}
+					$query ="SELECT * FROM posts_cats WHERE id = $id_edit_post";
+					print_r($query);
+					$rst = mysqli_query($cnt, $query);
+					if(isset($_POST['category_parent'])) {
+						if($_POST['category_parent'] > 0) {
+							$arr_cat = $_POST['category_parent'];
+							print_r($arr_cat);
+						}
+					foreach ($arr_cat as $key => $id_cat) {
+						$query = "UPDATE posts_cats
+						SET
+						`cat_id` = '{$id_cat}'
+						WHERE post_id = $id_edit_post";
 
+						var_dump($query);
+						$rst = mysqli_query($cnt,$query);
+						}
+					}
 				}
-
 				else {
 					echo '<div class="alert alert-danger">un problème est survenu , contactez le webmaster</div>';
 				}
@@ -265,6 +274,8 @@ while ($arr = mysqli_fetch_array($rst)) {
 					</div>
 					<?php
 					$i++;
+				$id_cat = $id;
+				var_dump($id_cat);
 				}
 			}
 			else {

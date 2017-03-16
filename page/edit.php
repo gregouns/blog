@@ -249,7 +249,7 @@ while ($arr = mysqli_fetch_array($rst)) {
 				$i = 0;
 				foreach ($arr_categories as $id => $cat) {
 					echo '<div class="input-group">';
-						echo toSELECT($arr_tree, 0, 'category_parent[]', $id);
+						echo toSELECT($arr_tree, 0, 'category_parent[]', $id,$cat);
 						?>
 						<span class="input-group-btn">
 							<button type="button" class="plus btn btn-success">

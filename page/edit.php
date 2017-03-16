@@ -38,12 +38,10 @@ $arr_tree = buildTree();
  * */
 if (isset($_POST['submit'])) {
 
-	print_r($_POST);
 	// 6.1 Je m'assure que je n'ai pas de données corrompues
 	// 6.2 Je m'assure que je n'ai pas de données vides dans les camps obligatoires (quels sont ils ???)
 	$title = $_POST['title'];
 	$title = cleaner($title);
-	var_dump($title);
 	$description = $_POST['description'];
 	$description = cleaner($description);
 	$date = $_POST['date'];
@@ -51,6 +49,9 @@ if (isset($_POST['submit'])) {
 
 	// 6.3 Je fais en sorte de regénérer un slug de titre (slugify du titre)
 	$title_url = slugify($title);
+
+	$tags_names = $_POST['tags_names'];
+	$tags_names = cleaner($tags_names);
 
 	if(true) {
 		echo 'ben oui';
@@ -76,13 +77,36 @@ if (isset($_POST['submit'])) {
 
 					// 10. Mettre les tags ID dans un tableau de type arrUpdateTagIds[] = id
 					$arrUpdateTagIds = explode(',', $_POST['tags_ids']);
+					foreach ($arrUpdateTagIds as $id) {
+						$query = "UPDATE posts_tags
+							SET
+							tag_id = $id
+							WHERE
+							post_id = $id_edit_post";
+						$rst = mysqli_query($cnt, $query);
+					}
 
 					// 11. Mettre les tags NAMES dans un tableau de type arrUpdateTagNames[] = name
-					$arrUpdateTagNames = explode(',', $_POST['tags_names']);
-
-					print_r($arrUpdateTagIds);
+					$arrUpdateTagNames = explode(',',$tags_names);
 					print_r($arrUpdateTagNames);
+					foreach ($arrUpdateTagNames as $tag) {
+						$query = "INSERT INTO tags
+							(id,
+							tag,
+							url,
+							status)
+							VALUES
+							(NULL,
+							'$tag',
+							'".slugify($tag)."',
+							1)";
+						print_r($query);
+						$rst = mysqli_query($cnt, $query);
+					}
+					// print_r($arrUpdateTagIds);
+					// print_r($arrUpdateTagNames);
 				}
+
 				else {
 					echo '<div class="alert alert-danger">un problème est survenu , contactez le webmaster</div>';
 				}
@@ -112,7 +136,6 @@ if (isset($_POST['submit'])) {
 $query = "SELECT * FROM posts where id = '{$id_edit_post}' LIMIT 1";
 $rst = mysqli_query($cnt, $query);
 $arr_post = mysqli_fetch_array($rst);
-print_r($arr_post);
 
 
 /**
@@ -142,7 +165,7 @@ $rst = mysqli_query($cnt, $query);
 while ($arr = mysqli_fetch_array($rst)) {
 	$arr_categories[$arr['id']] = $arr['name'];
 }
-print_r($arr_categories);
+// print_r($arr_categories);
 
 
 /**
@@ -163,7 +186,6 @@ $rst = mysqli_query($cnt, $query);
 while ($arr = mysqli_fetch_array($rst)) {
 	$arr_tags[$arr['id']] = $arr['tag'];
 }
-print_r($arr_tags);
 
 ?>
 

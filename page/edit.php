@@ -38,6 +38,8 @@ $arr_tree = buildTree();
  * */
 if (isset($_POST['submit'])) {
 
+	$tag_select_id;
+	
 	// 6.1 Je m'assure que je n'ai pas de données corrompues
 	// 6.2 Je m'assure que je n'ai pas de données vides dans les camps obligatoires (quels sont ils ???)
 	$title = $_POST['title'];
@@ -74,6 +76,7 @@ if (isset($_POST['submit'])) {
 					// 10. Mettre les tags ID dans un tableau de type arrUpdateTagIds[] = id
 
 					$arrUpdateTagIds = explode(',', $_POST['tags_ids']);
+					var_dump($arrUpdateTagIds);
 					foreach ($arrUpdateTagIds as $id) {
 						$query = "UPDATE posts_tags
 							SET
@@ -82,6 +85,9 @@ if (isset($_POST['submit'])) {
 							post_id = $id_edit_post";
 						$rst = mysqli_query($cnt, $query);
 					}
+					$query = "DELETE FROM posts_tags WHERE tag_id = 0";
+					$rst = mysqli_query($cnt, $query);
+
 					// 11. Mettre les tags NAMES dans un tableau de type arrUpdateTagNames[] = name
 
 					$arrUpdateTagNames = explode(',',$tags_names);
@@ -206,6 +212,7 @@ $query = "SELECT
 $rst = mysqli_query($cnt, $query);
 while ($arr = mysqli_fetch_array($rst)) {
 	$arr_tags[$arr['id']] = $arr['tag'];
+	$tag_select_id = $arr['id'];
 }
 
 ?>
@@ -236,8 +243,8 @@ while ($arr = mysqli_fetch_array($rst)) {
 	</div>
 	<div class="form-group">
 		<label for="tag">Tags ajoutés</label>
-		<input id="tags_ids" type="hidden" name="tags_ids" />
-		<input id="tags_names" type="hidden" name="tags_names" />
+		<input id="tags_ids" type="text" name="tags_ids" />
+		<input id="tags_names" type="text" name="tags_names" />
 		<div id="newtag" style="padding: 20px; border:1px solid #ccc; background: #eee;">
 		<?php 
 			if (count($arr_tags) > 0) {

@@ -77,6 +77,7 @@ if (isset($_POST['submit'])) {
 
 					// 10. Mettre les tags ID dans un tableau de type arrUpdateTagIds[] = id
 					$arrUpdateTagIds = explode(',', $_POST['tags_ids']);
+					print_r($arrUpdateTagIds);
 					foreach ($arrUpdateTagIds as $id) {
 						$query = "UPDATE posts_tags
 							SET

@@ -6,9 +6,4 @@ RewriteRule ^tags/([a-zA-Z0-9-]+)$ /index.php?page=tags&tag=$1 [L]
 RewriteRule ^formulaire$ /index.php?page=formulaire [L]
 RewriteRule ^categorie/([a-zA-Z0-9-]+)$ /index.php?page=categorie&categorie=$1 [L]
 RewriteRule ^edit/([a-zA-Z0-9-]+)$ /index.php?page=edit&edit=$1 [L]
-<<<<<<< Updated upstream
-RewriteRule ^edit$ /index.php?page=edit [L]
-=======
-RewriteRule ^edit_tag/([a-zA-Z0-9-]+)$ /index.php?page=edit_tag&edit_tag=$1 [L]
->>>>>>> Stashed changes
 RewriteRule ^accueil$ /index.php?page=accueil [L]

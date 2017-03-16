@@ -53,6 +53,9 @@ if (isset($_POST['submit'])) {
 	$tags_names = $_POST['tags_names'];
 	$tags_names = cleaner($tags_names);
 
+	$category = $_POST['category_parent'];
+	print_r($category);
+
 	if(true) {
 		echo 'ben oui';
 	}
@@ -76,6 +79,7 @@ if (isset($_POST['submit'])) {
 					echo '<div class="alert alert-success">Votre post a bien été modifié</div>';
 
 					// 10. Mettre les tags ID dans un tableau de type arrUpdateTagIds[] = id
+
 					$arrUpdateTagIds = explode(',', $_POST['tags_ids']);
 					foreach ($arrUpdateTagIds as $id) {
 						$query = "UPDATE posts_tags
@@ -85,8 +89,8 @@ if (isset($_POST['submit'])) {
 							post_id = $id_edit_post";
 						$rst = mysqli_query($cnt, $query);
 					}
-
 					// 11. Mettre les tags NAMES dans un tableau de type arrUpdateTagNames[] = name
+
 					$arrUpdateTagNames = explode(',',$tags_names);
 					foreach ($arrUpdateTagNames as $tag) {
 						if($tag != '') {
@@ -112,8 +116,7 @@ if (isset($_POST['submit'])) {
 							}
 						}
 					}
-					// print_r($arrUpdateTagIds);
-					// print_r($arrUpdateTagNames);
+
 				}
 
 				else {
@@ -291,6 +294,7 @@ while ($arr = mysqli_fetch_array($rst)) {
 
 <script type="text/javascript">
 	$(document).ready(function() {
+		// click for tags
 	    $(document).on('click', '.added_tag', function(event) {
 	    	event.preventDefault();
 	    	console.log(event);
@@ -362,6 +366,19 @@ while ($arr = mysqli_fetch_array($rst)) {
 				alert('Please insert tag');
 			}
 		});
-
-  	});
+		// click for catgegories
+		$(document).on('click', '.plus', function(e) {
+			e.preventDefault();
+			var el = $(e.currentTarget);
+			var clone = el.parent().parent().clone();
+			$('#anotherCategory').append(clone);
+			console.log($('#anotherCategory').find('.minus'));
+			$('#anotherCategory').find('.minus').prop("disabled", false);
+		});
+		$(document).on('click', '.minus', function(e) {
+			e.preventDefault();
+			var el = $(e.currentTarget);
+			el.parent().parent().remove();
+		});
+	});
 </script>

@@ -37,8 +37,6 @@ $arr_tree = buildTree();
  * 6. On doit mettre à jour les données du post essentiellement
  * */
 if (isset($_POST['submit'])) {
-
-	$tag_select_id;
 	
 	// 6.1 Je m'assure que je n'ai pas de données corrompues
 	// 6.2 Je m'assure que je n'ai pas de données vides dans les camps obligatoires (quels sont ils ???)
@@ -56,7 +54,6 @@ if (isset($_POST['submit'])) {
 	$tags_names = cleaner($tags_names);
 
 	$category = $_POST['category_parent'];
-	print_r($category);
 
 	// 6.4 En cas d'erreur en 6.1 ou 6.2 je renvoi un message d'erreur
 	if ($title != '') {
@@ -76,7 +73,6 @@ if (isset($_POST['submit'])) {
 					// 10. Mettre les tags ID dans un tableau de type arrUpdateTagIds[] = id
 
 					$arrUpdateTagIds = explode(',', $_POST['tags_ids']);
-					var_dump($arrUpdateTagIds);
 					foreach ($arrUpdateTagIds as $id) {
 						$query = "UPDATE posts_tags
 							SET
@@ -116,20 +112,16 @@ if (isset($_POST['submit'])) {
 						}
 					}
 					$query ="SELECT * FROM posts_cats WHERE id = $id_edit_post";
-					print_r($query);
 					$rst = mysqli_query($cnt, $query);
 					if(isset($_POST['category_parent'])) {
 						if($_POST['category_parent'] > 0) {
 							$arr_cat = $_POST['category_parent'];
-							print_r($arr_cat);
 						}
 					foreach ($arr_cat as $key => $id_cat) {
 						$query = "UPDATE posts_cats
 						SET
 						`cat_id` = '{$id_cat}'
 						WHERE post_id = $id_edit_post";
-
-						var_dump($query);
 						$rst = mysqli_query($cnt,$query);
 						}
 					}
@@ -243,8 +235,8 @@ while ($arr = mysqli_fetch_array($rst)) {
 	</div>
 	<div class="form-group">
 		<label for="tag">Tags ajoutés</label>
-		<input id="tags_ids" type="text" name="tags_ids" />
-		<input id="tags_names" type="text" name="tags_names" />
+		<input id="tags_ids" type="hidden" name="tags_ids" />
+		<input id="tags_names" type="hidden" name="tags_names" />
 		<div id="newtag" style="padding: 20px; border:1px solid #ccc; background: #eee;">
 		<?php 
 			if (count($arr_tags) > 0) {
@@ -282,7 +274,6 @@ while ($arr = mysqli_fetch_array($rst)) {
 					<?php
 					$i++;
 				$id_cat = $id;
-				var_dump($id_cat);
 				}
 			}
 			else {

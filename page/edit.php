@@ -141,13 +141,19 @@ if (isset($_POST['submit'])) {
 					if(isset($_POST['category_parent'])) {
 						if($_POST['category_parent'] > 0) {
 							$arr_cat = $_POST['category_parent'];
+							var_dump($arr_cat);
 						}
-					foreach ($arr_cat as $key => $id_cat) {
-						$query = "UPDATE posts_cats
-						SET
-						`cat_id` = '{$id_cat}'
-						WHERE post_id = $id_edit_post";
+						$query = "DELETE FROM posts_cats WHERE post_id = $id_edit_post";
 						$rst = mysqli_query($cnt,$query);
+						foreach ($arr_cat as $key => $id_cat) {
+							$query = "INSERT INTO posts_cats
+							(post_id,
+							cat_id)
+							VALUES
+							($id_edit_post,
+							$id_cat)";
+							var_dump($query);
+							$rst = mysqli_query($cnt,$query);
 						}
 					}
 				}
@@ -205,6 +211,7 @@ $query = "SELECT
 		c.id = pc.cat_id
 		AND pc.post_id = '{$id_edit_post}'
 ";
+var_dump($query);
 $rst = mysqli_query($cnt, $query);
 while ($arr = mysqli_fetch_array($rst)) {
 	$arr_categories[$arr['id']] = $arr['name'];

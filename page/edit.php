@@ -1,4 +1,6 @@
 <?php
+$cnt2 = mysqli_connect(MYSQL_HOST, MYSQL_USER, MYSQL_PASS, MYSQL_DB);
+mysqli_query($cnt2, "SET NAMES 'utf8'");
 
 $id_edit_post = $_GET['edit'];
 $arr_tree = buildTree();
@@ -53,6 +55,8 @@ if (isset($_POST['submit'])) {
 	$tags_names = $_POST['tags_names'];
 	$tags_names = cleaner($tags_names);
 
+
+	$tags_ids = $_POST['tags_ids'];
 	$category = $_POST['category_parent'];
 
 	// 6.4 En cas d'erreur en 6.1 ou 6.2 je renvoi un message d'erreur
@@ -70,45 +74,66 @@ if (isset($_POST['submit'])) {
 					// 6.5 Je renvois un message de félicitation si l'insertion s'est bien réalisée
 					echo '<div class="alert alert-success">Votre post a bien été modifié</div>';
 
-					// 10. Mettre les tags ID dans un tableau de type arrUpdateTagIds[] = id
-
-					$arrUpdateTagIds = explode(',', $_POST['tags_ids']);
-					foreach ($arrUpdateTagIds as $id) {
-						$query = "UPDATE posts_tags
-							SET
-							tag_id = $id
-							WHERE
-							post_id = $id_edit_post";
-						$rst = mysqli_query($cnt, $query);
-					}
-					$query = "DELETE FROM posts_tags WHERE tag_id = 0";
-					$rst = mysqli_query($cnt, $query);
-
 					// 11. Mettre les tags NAMES dans un tableau de type arrUpdateTagNames[] = name
 
 					$arrUpdateTagNames = explode(',',$tags_names);
-					foreach ($arrUpdateTagNames as $tag) {
-						if($tag != '') {
-							$query = "INSERT IGNORE INTO tags
-								(id,
-								tag,
-								url,
-								status)
-								VALUES
-								(NULL,
-								'$tag',
-								'".slugify($tag)."',
-								1)";
-							if(mysqli_query($cnt, $query)) {
-								$tag_id = mysqli_insert_id($cnt);
-								$query = "INSERT IGNORE INTO posts_tags
+					if(sizeof($arrUpdateTagNames)  >1) {
+						var_dump($arrUpdateTagNames);
+						foreach ($arrUpdateTagNames as $tag) {
+							if($tag != '') {
+								$query = "INSERT IGNORE INTO tags
+									(id,
+									tag,
+									url,
+									status)
+									VALUES
+									(NULL,
+									'$tag',
+									'".slugify($tag)."',
+									1)";
+								$rst = mysqli_query($cnt, $query);
+								$query = "SELECT * FROM tags WHERE tag = '{$tag}'";
+								$rst = mysqli_query($cnt,$query);
+								while($arr = mysqli_fetch_array($rst)) {
+									$recup_tag_id = $arr['id'];
+									$query = "INSERT INTO posts_tags
+									(post_id,
+									tag_id)
+									VALUES
+									($id_edit_post,
+									$recup_tag_id)";
+									$rst = mysqli_query($cnt, $query);
+								}
+							}
+
+						}
+					}
+						// . Mettre les tags ids dans un tableau de type arrUpdateTagids[] = id
+					$arrUpdateTagIds = explode(',',$tags_ids);
+					if (sizeof($arrUpdateTagIds) > 1) {
+						$query = "DELETE FROM posts_tags WHERE post_id = $id_edit_post";
+						var_dump($query);
+						$rst = mysqli_query($cnt, $query);
+						;
+						foreach ($arrUpdateTagIds as $id) {
+							$query = "INSERT INTO posts_tags
 								(post_id,
 								tag_id)
 								VALUES
 								($id_edit_post,
-								$tag_id)";
-								$rst = mysqli_query($cnt, $query);
-							}
+								$id)";
+							$rst = mysqli_query($cnt, $query);
+						}
+					}
+					else {
+						foreach ($arrUpdateTagIds as $id) {
+							$query = "INSERT INTO posts_tags
+								(post_id,
+								tag_id)
+								VALUES
+								($id_edit_post,
+								$id)";
+							$rst = mysqli_query($cnt, $query);
 						}
 					}
 					$query ="SELECT * FROM posts_cats WHERE id = $id_edit_post";
@@ -205,8 +230,8 @@ $rst = mysqli_query($cnt, $query);
 while ($arr = mysqli_fetch_array($rst)) {
 	$arr_tags[$arr['id']] = $arr['tag'];
 	$tag_select_id = $arr['id'];
+	
 }
-
 ?>
 
 <form method="post" action="/edit/<?php echo $id_edit_post ?>">
@@ -235,8 +260,8 @@ while ($arr = mysqli_fetch_array($rst)) {
 	</div>
 	<div class="form-group">
 		<label for="tag">Tags ajoutés</label>
-		<input id="tags_ids" type="hidden" name="tags_ids" />
-		<input id="tags_names" type="hidden" name="tags_names" />
+		<input id="tags_ids" type="text" name="tags_ids" />
+		<input id="tags_names" type="text" name="tags_names" />
 		<div id="newtag" style="padding: 20px; border:1px solid #ccc; background: #eee;">
 		<?php 
 			if (count($arr_tags) > 0) {
@@ -306,7 +331,6 @@ while ($arr = mysqli_fetch_array($rst)) {
 		// click for tags
 	    $(document).on('click', '.added_tag', function(event) {
 	    	event.preventDefault();
-	    	console.log(event);
       		var el = $(event.currentTarget);
 
 			var clone = el.clone();
@@ -320,8 +344,7 @@ while ($arr = mysqli_fetch_array($rst)) {
 			$.each($('#newtag').find('a'), function(key, a) {
 				console.log(a);
 				var id = $(a).attr('data-id');
-				console.log(id)
-				$('#tags_ids').val($('#tags_ids').val()+id+',')
+				$('#tags_ids').val($('#tags_ids').val()+id+',');
 			});
 	  	});
 	    $(document).on('click', '.existing_tag', function(event) {
@@ -341,7 +364,6 @@ while ($arr = mysqli_fetch_array($rst)) {
 				$.each($('#newtag').find('a'), function(key, a) {
 					console.log(a);
 					var id = $(a).attr('data-id');
-					console.log(id)
 					$('#tags_ids').val($('#tags_ids').val()+id+',')
 				});
 			}
@@ -375,7 +397,7 @@ while ($arr = mysqli_fetch_array($rst)) {
 				alert('Please insert tag');
 			}
 		});
-		// click for catgegories
+		// click for categories
 		$(document).on('click', '.plus', function(e) {
 			e.preventDefault();
 			var el = $(e.currentTarget);

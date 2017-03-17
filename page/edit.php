@@ -112,7 +112,6 @@ if (isset($_POST['submit'])) {
 					$arrUpdateTagIds = explode(',',$tags_ids);
 					if (sizeof($arrUpdateTagIds) > 1) {
 						$query = "DELETE FROM posts_tags WHERE post_id = $id_edit_post";
-						var_dump($query);
 						$rst = mysqli_query($cnt, $query);
 						;
 						foreach ($arrUpdateTagIds as $id) {
@@ -141,19 +140,19 @@ if (isset($_POST['submit'])) {
 					if(isset($_POST['category_parent'])) {
 						if($_POST['category_parent'] > 0) {
 							$arr_cat = $_POST['category_parent'];
-							var_dump($arr_cat);
 						}
 						$query = "DELETE FROM posts_cats WHERE post_id = $id_edit_post";
 						$rst = mysqli_query($cnt,$query);
 						foreach ($arr_cat as $key => $id_cat) {
-							$query = "INSERT INTO posts_cats
-							(post_id,
-							cat_id)
-							VALUES
-							($id_edit_post,
-							$id_cat)";
-							var_dump($query);
-							$rst = mysqli_query($cnt,$query);
+							if($id_cat != -1) {
+								$query = "INSERT INTO posts_cats
+								(post_id,
+								cat_id)
+								VALUES
+								($id_edit_post,
+								$id_cat)";
+								$rst = mysqli_query($cnt,$query);
+							}
 						}
 					}
 				}
@@ -211,7 +210,6 @@ $query = "SELECT
 		c.id = pc.cat_id
 		AND pc.post_id = '{$id_edit_post}'
 ";
-var_dump($query);
 $rst = mysqli_query($cnt, $query);
 while ($arr = mysqli_fetch_array($rst)) {
 	$arr_categories[$arr['id']] = $arr['name'];
@@ -235,9 +233,7 @@ $query = "SELECT
 ";
 $rst = mysqli_query($cnt, $query);
 while ($arr = mysqli_fetch_array($rst)) {
-	$arr_tags[$arr['id']] = $arr['tag'];
-	$tag_select_id = $arr['id'];
-	
+	$arr_tags[$arr['id']] = $arr['tag'];	
 }
 ?>
 
@@ -267,8 +263,8 @@ while ($arr = mysqli_fetch_array($rst)) {
 	</div>
 	<div class="form-group">
 		<label for="tag">Tags ajoutés</label>
-		<input id="tags_ids" type="text" name="tags_ids" />
-		<input id="tags_names" type="text" name="tags_names" />
+		<input id="tags_ids" type="hidden" name="tags_ids" />
+		<input id="tags_names" type="hidden" name="tags_names" />
 		<div id="newtag" style="padding: 20px; border:1px solid #ccc; background: #eee;">
 		<?php 
 			if (count($arr_tags) > 0) {
@@ -287,7 +283,7 @@ while ($arr = mysqli_fetch_array($rst)) {
 
 	<label for="category">define your categories</label>
  	
- 		<?php 
+ 		<?php
 			if (count($arr_categories) > 0) {
 				$i = 0;
 				foreach ($arr_categories as $id => $cat) {
@@ -305,7 +301,6 @@ while ($arr = mysqli_fetch_array($rst)) {
 					</div>
 					<?php
 					$i++;
-				$id_cat = $id;
 				}
 			}
 			else {

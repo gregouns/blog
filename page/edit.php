@@ -26,7 +26,7 @@ $arr_tree = buildTree();
  * 		7.3.1 Si le tag est ajouté il est mis dans la liste des tags ajoutés
  * 		7.3.2 Si le tag est supprimé il doit disparaitre car non présent dans ma base de donnée
  * 		7.3.3 Si le tag existe déjà il faut alors ne pas l'ajouter mais glisser le tag existant de tous vers les tags ajoutés
- * 8. J'arriche mes categories dans le formulaire
+ * 8. J'affiche mes categories dans le formulaire
  * 	8.1 Je dois duplique le select tant que j'ai des categories
  * 	8.2 Toutes les categories doivent être supprimables "x" à l'exception de la premiere sinon je fais disparaitre l'ajout de categorie
  * 9. Ajouter les tags selectionnés dans un input visible puis caché à terme
@@ -48,16 +48,13 @@ if (isset($_POST['submit'])) {
 	$description = cleaner($description);
 	$date = $_POST['date'];
 	$date = cleaner($date);
-
 	// 6.3 Je fais en sorte de regénérer un slug de titre (slugify du titre)
 	$title_url = slugify($title);
 
 	$tags_names = $_POST['tags_names'];
 	$tags_names = cleaner($tags_names);
 
-
 	$tags_ids = $_POST['tags_ids'];
-	$category = $_POST['category_parent'];
 
 	// 6.4 En cas d'erreur en 6.1 ou 6.2 je renvoi un message d'erreur
 	if ($title != '') {
@@ -77,7 +74,7 @@ if (isset($_POST['submit'])) {
 					// 11. Mettre les tags NAMES dans un tableau de type arrUpdateTagNames[] = name
 
 					$arrUpdateTagNames = explode(',',$tags_names);
-					if(sizeof($arrUpdateTagNames)  >1) {
+					if(sizeof($arrUpdateTagNames)  > 1) {
 						var_dump($arrUpdateTagNames);
 						foreach ($arrUpdateTagNames as $tag) {
 							if($tag != '') {
@@ -108,7 +105,8 @@ if (isset($_POST['submit'])) {
 
 						}
 					}
-						// . Mettre les tags ids dans un tableau de type arrUpdateTagids[] = id
+					// . Mettre les tags ids dans un tableau de type arrUpdateTagids[] = id
+
 					$arrUpdateTagIds = explode(',',$tags_ids);
 					if (sizeof($arrUpdateTagIds) > 1) {
 						$query = "DELETE FROM posts_tags WHERE post_id = $id_edit_post";
@@ -135,8 +133,7 @@ if (isset($_POST['submit'])) {
 							$rst = mysqli_query($cnt, $query);
 						}
 					}
-					$query ="SELECT * FROM posts_cats WHERE id = $id_edit_post";
-					$rst = mysqli_query($cnt, $query);
+
 					if(isset($_POST['category_parent'])) {
 						if($_POST['category_parent'] > 0) {
 							$arr_cat = $_POST['category_parent'];
@@ -214,9 +211,8 @@ $rst = mysqli_query($cnt, $query);
 while ($arr = mysqli_fetch_array($rst)) {
 	$arr_categories[$arr['id']] = $arr['name'];
 }
-// print_r($arr_categories);
 
-
+var_dump($arr_categories);
 /**
  * 3. Charger les données des tags associées au posts
  * -> $arr_tags[id] = name

@@ -138,18 +138,36 @@ if (isset($_POST['submit'])) {
 						if($_POST['category_parent'] > 0) {
 							$arr_cat = $_POST['category_parent'];
 						}
+						var_dump($arr_cat);
+						echo '<br/> $arr_cat';
+						$query = "SELECT 
+								*
+							FROM 
+								categories AS c, 
+								posts_cats AS pc 
+							WHERE 
+								c.id = pc.cat_id
+								AND pc.post_id = '{$id_edit_post}'
+						";
+						$rst = mysqli_query($cnt, $query);
+						while ($arr = mysqli_fetch_array($rst)) {
+							$arr_categories[$arr['id']] = $arr['name'];
+						}
+						var_dump($arr_categories);
+						echo '<br/> $arr_categories';
+						$result = array_diff($arr_cat, $arr_categories);
+						var_dump($result);
+						echo '<br/> $result';
 						$query = "DELETE FROM posts_cats WHERE post_id = $id_edit_post";
 						$rst = mysqli_query($cnt,$query);
 						foreach ($arr_cat as $key => $id_cat) {
-							if($id_cat != -1) {
 								$query = "INSERT INTO posts_cats
-								(post_id,
-								cat_id)
-								VALUES
-								($id_edit_post,
-								$id_cat)";
-								$rst = mysqli_query($cnt,$query);
-							}
+							(post_id,
+							cat_id)
+							VALUES
+							($id_edit_post,
+							$id_cat)";
+							$rst = mysqli_query($cnt,$query);
 						}
 					}
 				}
@@ -211,8 +229,6 @@ $rst = mysqli_query($cnt, $query);
 while ($arr = mysqli_fetch_array($rst)) {
 	$arr_categories[$arr['id']] = $arr['name'];
 }
-
-var_dump($arr_categories);
 /**
  * 3. Charger les données des tags associées au posts
  * -> $arr_tags[id] = name

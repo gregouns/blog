@@ -97,16 +97,17 @@ function toUL ($arr, $pass = 0) {
  */
 function toSELECT ($arr, $pass = 0, $nameSelect = 'category_parent' ,$value = '', $name ='Sélectionnez') {
   $html = '';
+  
   if ($pass == 0) {
     $html = '<select name="'.$nameSelect.'" class="form-control">' . PHP_EOL;
-    $html .= '<option value="-1">'.$name.'</option>';
+    $html .= '<option value="'.$value.'">'.$name.'</option>';
   }
   foreach ( $arr as $v ) {
     $html .= '<option value="'.$v['id'].'">';
     $html .= str_repeat("--", $pass); // use the $pass value to create the --
     $html .= $v['name'] . '</option>' . PHP_EOL;
     if ( array_key_exists('children', $v) ) {
-      $html .= toSELECT($v['children'], $pass+1);
+      $html .= toSELECT($v['children'], $pass+1,'category_parent[]',$value,$name);
     }
   }
   if ($pass == 0) $html.= '</select>' . PHP_EOL;

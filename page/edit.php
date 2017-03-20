@@ -159,14 +159,17 @@ if (isset($_POST['submit'])) {
 						}
 						$query = "DELETE FROM posts_cats WHERE post_id = $id_edit_post";
 						$rst = mysqli_query($cnt,$query);
+						var_dump($arr_cat);
 						foreach ($arr_cat as $key => $id_cat) {
+							if($id_cat != "-1") {
 								$query = "INSERT INTO posts_cats
-							(post_id,
-							cat_id)
-							VALUES
-							($id_edit_post,
-							$id_cat)";
-							$rst = mysqli_query($cnt,$query);
+								(post_id,
+								cat_id)
+								VALUES
+								($id_edit_post,
+								$id_cat)";
+								$rst = mysqli_query($cnt,$query);
+							}
 						}
 					}
 				}

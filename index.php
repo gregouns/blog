@@ -45,6 +45,11 @@ if (isset($_GET['page'])) {
 			$title = "edit";
 			break;
 
+		case 'edit_tag':
+			$page  = '/page/edit_tag.php';
+			$title = "edit_tag";
+			break;
+
 		default:
 			$title = "Erreur";
 			$page  = '/page/erreur404.php';

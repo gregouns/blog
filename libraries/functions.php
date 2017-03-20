@@ -101,7 +101,11 @@ function toSELECT ($arr, $pass = 0, $nameSelect = 'category_parent' ,$value = ''
   if ($pass == 0) {
     $html = '<select name="'.$nameSelect.'" class="form-control">' . PHP_EOL;
     $html .= '<option value="'.$value.'">'.$name.'</option>';
+    if($name != "Sélectionnez"){
+      $html .= '<option value="-1">---aucune---</option>';
+    }
   }
+
   foreach ( $arr as $v ) {
     $html .= '<option value="'.$v['id'].'">';
     $html .= str_repeat("--", $pass); // use the $pass value to create the --

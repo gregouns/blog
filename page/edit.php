@@ -74,8 +74,12 @@ if (isset($_POST['submit'])) {
 					// 11. Mettre les tags NAMES dans un tableau de type arrUpdateTagNames[] = name
 
 					$arrUpdateTagNames = explode(',',$tags_names);
+					$arrUpdateTagIds = explode(',',$tags_ids);
+					if(count($arrUpdateTagNames) == 1 && count($arrUpdateTagIds) == 1) {
+						$query = "DELETE FROM posts_tags WHERE post_id = $id_edit_post";
+						$rst = mysqli_query($cnt, $query);
+					}
 					if(sizeof($arrUpdateTagNames)  > 1) {
-						var_dump($arrUpdateTagNames);
 						foreach ($arrUpdateTagNames as $tag) {
 							if($tag != '') {
 								$query = "INSERT IGNORE INTO tags
@@ -90,6 +94,7 @@ if (isset($_POST['submit'])) {
 									1)";
 								$rst = mysqli_query($cnt, $query);
 								$query = "SELECT * FROM tags WHERE tag = '{$tag}'";
+								var_dump($query);
 								$rst = mysqli_query($cnt,$query);
 								while($arr = mysqli_fetch_array($rst)) {
 									$recup_tag_id = $arr['id'];
@@ -107,8 +112,9 @@ if (isset($_POST['submit'])) {
 					}
 					// . Mettre les tags ids dans un tableau de type arrUpdateTagids[] = id
 
-					$arrUpdateTagIds = explode(',',$tags_ids);
+					
 					if (sizeof($arrUpdateTagIds) > 1) {
+						var_dump($arrUpdateTagIds);
 						$query = "DELETE FROM posts_tags WHERE post_id = $id_edit_post";
 						$rst = mysqli_query($cnt, $query);
 						;
@@ -138,8 +144,6 @@ if (isset($_POST['submit'])) {
 						if($_POST['category_parent'] > 0) {
 							$arr_cat = $_POST['category_parent'];
 						}
-						var_dump($arr_cat);
-						echo '<br/> $arr_cat';
 						$query = "SELECT 
 								*
 							FROM 
@@ -153,11 +157,6 @@ if (isset($_POST['submit'])) {
 						while ($arr = mysqli_fetch_array($rst)) {
 							$arr_categories[$arr['id']] = $arr['name'];
 						}
-						var_dump($arr_categories);
-						echo '<br/> $arr_categories';
-						$result = array_diff($arr_cat, $arr_categories);
-						var_dump($result);
-						echo '<br/> $result';
 						$query = "DELETE FROM posts_cats WHERE post_id = $id_edit_post";
 						$rst = mysqli_query($cnt,$query);
 						foreach ($arr_cat as $key => $id_cat) {

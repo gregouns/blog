@@ -274,7 +274,8 @@ while ($arr = mysqli_fetch_array($rst)) {
 <form method="post" action="/edit/<?php echo $id_edit_post ?>">
 	<div class="form-group">
 		<label for="titre">titre</label>
-		<input id="titre" class="form-control" name="title" type="text" value="<?php echo (isset($_POST['title']) ? $_POST['title'] : ''); ?>" />	
+		<input id="titre" class="form-control" name="title" type="text" value="<?php echo (isset($_POST['title']) && !isset($_POST['title_delete'])  ? $_POST['title'] : ''); ?>" />
+		<input id="title_delete" type="hidden" name = "title_delete" value="1" />
 	</div>
 	<div class="form-group">
 		<label for="date">date</label>

@@ -139,10 +139,9 @@ if (isset($_POST['submit'])) {
 
 					// . Mettre les tags ids dans un tableau de type arrUpdateTagids[] = id
 
-					if (sizeof($arrUpdateTagIds) > 1) {
+					if (sizeof($arrUpdateTagIds) > 1 && sizeof($arrUpdateTagNames) == 1) {
 						$query = "DELETE FROM posts_tags WHERE post_id = $id_edit_post";
 						var_dump($query);
-						echo 'tagids >1 ';
 						$rst = mysqli_query($cnt, $query);
 						;
 						foreach ($arrUpdateTagIds as $id) {
@@ -181,7 +180,6 @@ if (isset($_POST['submit'])) {
 						}
 						$query = "DELETE FROM posts_cats WHERE post_id = $id_edit_post";
 						$rst = mysqli_query($cnt,$query);
-						var_dump($arr_cat);
 						foreach ($arr_cat as $key => $id_cat) {
 							if($id_cat != "-1") {
 								$query = "INSERT INTO posts_cats
@@ -367,6 +365,11 @@ while ($arr = mysqli_fetch_array($rst)) {
 <script type="text/javascript">
 	$(document).ready(function() {
 		// click for tags
+		$.each($('#newtag').find('a'), function(key, a) {
+				console.log(a);
+				var id = $(a).attr('data-id');
+				$('#tags_ids').val($('#tags_ids').val()+id+',');
+			});
 	    $(document).on('click', '.added_tag', function(event) {
 	    	event.preventDefault();
       		var el = $(event.currentTarget);
@@ -411,7 +414,7 @@ while ($arr = mysqli_fetch_array($rst)) {
 				$.each($('#newtag').find('a'), function(key, a) {
 					var id = $(a).attr('data-id');
 					if (!id) {
-						$('#tags_names').val($('#tags_names').val()+$(a).text()+',')
+						$('#tags_names').val($('#tags_names').val()+$(a).text()+',');
 					}
 				});
 			}

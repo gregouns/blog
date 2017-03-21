@@ -107,11 +107,13 @@ function toSELECT ($arr, $pass = 0, $nameSelect = 'category_parent' ,$value = ''
   }
 
   foreach ( $arr as $v ) {
-    $html .= '<option value="'.$v['id'].'">';
-    $html .= str_repeat("--", $pass); // use the $pass value to create the --
-    $html .= $v['name'] . '</option>' . PHP_EOL;
-    if ( array_key_exists('children', $v) ) {
-      $html .= toSELECT($v['children'], $pass+1,'category_parent[]',$value,$name);
+    if($v['name'] != $name) {
+      $html .= '<option value="'.$v['id'].'">';
+      $html .= str_repeat("--", $pass); // use the $pass value to create the --
+      $html .= $v['name'] . '</option>' . PHP_EOL;
+      if ( array_key_exists('children', $v) ) {
+        $html .= toSELECT($v['children'], $pass+1,'category_parent[]',$value,$name);
+      }
     }
   }
   if ($pass == 0) $html.= '</select>' . PHP_EOL;

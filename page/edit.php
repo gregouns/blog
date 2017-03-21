@@ -5,7 +5,6 @@ mysqli_query($cnt2, "SET NAMES 'utf8'");
 $id_edit_post = $_GET['edit'];
 $arr_tree = buildTree();
 
-
 /**
  * 1. Charger les données du post
  * 2. Charger les données des categories associées au posts
@@ -90,16 +89,17 @@ if (isset($_POST['submit'])) {
 									1)";
 								$rst = mysqli_query($cnt, $query);
 								$query = "SELECT * FROM tags WHERE tag = '{$tag}'";
-								$rst = mysqli_query($cnt,$query);
-								while($arr = mysqli_fetch_array($rst)) {
-									$recup_tag_id = $arr['id'];
-									$query = "INSERT INTO posts_tags
-									(post_id,
-									tag_id)
-									VALUES
-									($id_edit_post,
-									$recup_tag_id)";
-									$rst = mysqli_query($cnt, $query);
+								if ($rst = mysqli_query($cnt,$query)) {
+									while($arr = mysqli_fetch_array($rst)) {
+										$recup_tag_id = $arr['id'];
+										$query = "INSERT INTO posts_tags
+										(post_id,
+										tag_id)
+										VALUES
+										($id_edit_post,
+										$recup_tag_id)";
+										$rst = mysqli_query($cnt, $query);
+									}
 								}
 							}
 						}
@@ -136,7 +136,7 @@ if (isset($_POST['submit'])) {
 							}
 						}
 					}
-					
+
 					// . Mettre les tags ids dans un tableau de type arrUpdateTagids[] = id
 
 					if (sizeof($arrUpdateTagIds) > 1) {
@@ -289,7 +289,7 @@ while ($arr = mysqli_fetch_array($rst)) {
 	<div class="form-group">
 		<label for="tag">define your tags</label>
 		<div class="input-group">
-			<input id="tag" class="form-control" name="tag" type="text" value="" />
+			<input id="tag" class="form-control" name="tag" type="text" value=""/>
 			<span class="input-group-btn">
 				<button type="button" class="plustag btn btn-success">
 					<i class="glyphicon glyphicon-plus"></i>
@@ -417,22 +417,24 @@ while ($arr = mysqli_fetch_array($rst)) {
 			}
 	    });
 	    $(document).on('click', '.plustag', function(event) {
-	    	var val = $('#tag').val();
-	    	if (val.length > 0) {
-			$('#newtag').append('<a href="#" class="existing_tag">'+$('#tag').val()+'</a>');
-				$('#newtag').append(' ');
-				$('#tag').val('');
+	    	var val = $('#tag').val().split(',');
+	    	for (i = 0; i < val.length; i++) {
+		    	if (val.length > 0) {
+					$('#newtag').append('<a href="#" class="existing_tag">'+val[i]+'</a>');
+					$('#newtag').append(' ');
+					$('#tag').val('');
 
-				$('#tags_names').val('');
-				$.each($('#newtag').find('a'), function(key, a) {
-					var id = $(a).attr('data-id');
-					if (!id) {
-						$('#tags_names').val($('#tags_names').val()+$(a).text()+',')
-					}
-				});
-			}
-			else {
-				alert('Please insert tag');
+					$('#tags_names').val('');
+					$.each($('#newtag').find('a'), function(key, a) {
+						var id = $(a).attr('data-id');
+						if (!id) {
+							$('#tags_names').val($('#tags_names').val()+$(a).text()+',')
+						}
+					});
+				}
+				else {
+					alert('Please insert tag');
+				}
 			}
 		});
 		// click for categories

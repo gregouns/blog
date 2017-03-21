@@ -41,6 +41,7 @@ if (isset($_POST['submit'])) {
 	
 	// 6.1 Je m'assure que je n'ai pas de données corrompues
 	// 6.2 Je m'assure que je n'ai pas de données vides dans les camps obligatoires (quels sont ils ???)
+
 	$title = $_POST['title'];
 	$title = cleaner($title);
 	$description = $_POST['description'];
@@ -267,12 +268,13 @@ $rst = mysqli_query($cnt, $query);
 while ($arr = mysqli_fetch_array($rst)) {
 	$arr_tags[$arr['id']] = $arr['tag'];	
 }
+
 ?>
 
 <form method="post" action="/edit/<?php echo $id_edit_post ?>">
 	<div class="form-group">
 		<label for="titre">titre</label>
-		<input id="titre" class="form-control" name="title" type="text" value="<?php echo (isset($_POST['title']) ? $_POST['title'] : ''); ?>" />
+		<input id="titre" class="form-control" name="title" type="text" value="<?php echo (isset($_POST['title']) ? $_POST['title'] : ''); ?>" />	
 	</div>
 	<div class="form-group">
 		<label for="date">date</label>
@@ -359,7 +361,6 @@ while ($arr = mysqli_fetch_array($rst)) {
 		submit
 	</button>
 </form>
-
 <script type="text/javascript">
 	$(document).ready(function() {
 		// click for tags

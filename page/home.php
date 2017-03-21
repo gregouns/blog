@@ -17,15 +17,24 @@
 			$query2 = "SELECT * ,t.url AS turl FROM tags AS t,posts_tags AS pt 
 				WHERE pt.post_id = '{$arr['id']}' AND pt.tag_id = t.id";
 			$rst2 = mysqli_query($cnt2,$query2);
-			
-			echo 'tag: ';
+			if(mysqli_num_rows($rst2) == 0) {
+				echo 'aucun tag choisi';
+			}
+			else {
+				echo 'tags: ';
+			}
 			while($arr2 = mysqli_fetch_array($rst2)) {
 				echo '<a href = "/tags/'.$arr2['turl'].'">' . $arr2['tag'] . '</a>,';
 			}
 			$query3 = "SELECT * ,c.url AS curl FROM categories AS c,posts_cats AS pc 
 				WHERE pc.post_id = '{$arr['id']}' AND pc.cat_id = c.id";
 			$rst3 = mysqli_query($cnt3,$query3);
+			if(mysqli_num_rows($rst3) == 0) {
+				echo '<br/>aucune catégorie choisie';
+			}
+			else {	
 			echo '<br/>categorie: ';
+			}
 			while($arr3 = mysqli_fetch_array($rst3)) {
 				echo '<a style="color:green;" href = "/categorie/'.$arr3['curl'].'">' . $arr3['name'] . '</a>,';
 			}

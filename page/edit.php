@@ -75,11 +75,38 @@ if (isset($_POST['submit'])) {
 
 					$arrUpdateTagNames = explode(',',$tags_names);
 					$arrUpdateTagIds = explode(',',$tags_ids);
-					if(count($arrUpdateTagNames) == 1 && count($arrUpdateTagIds) == 1) {
+					if(sizeof($arrUpdateTagNames)  > 1) {
+						foreach ($arrUpdateTagNames as $tag) {
+							if($tag != '') {
+								$query = "INSERT IGNORE INTO tags
+									(id,
+									tag,
+									url,
+									status)
+									VALUES
+									(NULL,
+									'$tag',
+									'".slugify($tag)."',
+									1)";
+								$rst = mysqli_query($cnt, $query);
+								$query = "SELECT * FROM tags WHERE tag = '{$tag}'";
+								$rst = mysqli_query($cnt,$query);
+								while($arr = mysqli_fetch_array($rst)) {
+									$recup_tag_id = $arr['id'];
+									$query = "INSERT INTO posts_tags
+									(post_id,
+									tag_id)
+									VALUES
+									($id_edit_post,
+									$recup_tag_id)";
+									$rst = mysqli_query($cnt, $query);
+								}
+							}
+						}
+					}
+					if(sizeof($arrUpdateTagNames)  > 1 && sizeof($arrUpdateTagIds) == 0) {
 						$query = "DELETE FROM posts_tags WHERE post_id = $id_edit_post";
 						$rst = mysqli_query($cnt, $query);
-					}
-					if(sizeof($arrUpdateTagNames)  > 1) {
 						foreach ($arrUpdateTagNames as $tag) {
 							if($tag != '') {
 								$query = "INSERT IGNORE INTO tags
@@ -107,15 +134,15 @@ if (isset($_POST['submit'])) {
 									$rst = mysqli_query($cnt, $query);
 								}
 							}
-
 						}
 					}
+					
 					// . Mettre les tags ids dans un tableau de type arrUpdateTagids[] = id
 
-					
 					if (sizeof($arrUpdateTagIds) > 1) {
-						var_dump($arrUpdateTagIds);
 						$query = "DELETE FROM posts_tags WHERE post_id = $id_edit_post";
+						var_dump($query);
+						echo 'tagids >1 ';
 						$rst = mysqli_query($cnt, $query);
 						;
 						foreach ($arrUpdateTagIds as $id) {
@@ -128,17 +155,12 @@ if (isset($_POST['submit'])) {
 							$rst = mysqli_query($cnt, $query);
 						}
 					}
-					else {
-						foreach ($arrUpdateTagIds as $id) {
-							$query = "INSERT INTO posts_tags
-								(post_id,
-								tag_id)
-								VALUES
-								($id_edit_post,
-								$id)";
-							$rst = mysqli_query($cnt, $query);
-						}
+					if(count($arrUpdateTagNames) == 1 && count($arrUpdateTagIds) == 1) {
+						$query = "DELETE FROM posts_tags WHERE post_id = $id_edit_post";
+						$rst = mysqli_query($cnt, $query);
 					}
+
+					// update categories
 
 					if(isset($_POST['category_parent'])) {
 						if($_POST['category_parent'] > 0) {
@@ -277,8 +299,8 @@ while ($arr = mysqli_fetch_array($rst)) {
 	</div>
 	<div class="form-group">
 		<label for="tag">Tags ajoutés</label>
-		<input id="tags_ids" type="hidden" name="tags_ids" />
-		<input id="tags_names" type="hidden" name="tags_names" />
+		<input id="tags_ids" type="text" name="tags_ids" />
+		<input id="tags_names" type="text" name="tags_names" />
 		<div id="newtag" style="padding: 20px; border:1px solid #ccc; background: #eee;">
 		<?php 
 			if (count($arr_tags) > 0) {

@@ -121,7 +121,6 @@ if (isset($_POST['submit'])) {
 									1)";
 								$rst = mysqli_query($cnt, $query);
 								$query = "SELECT * FROM tags WHERE tag = '{$tag}'";
-								var_dump($query);
 								$rst = mysqli_query($cnt,$query);
 								while($arr = mysqli_fetch_array($rst)) {
 									$recup_tag_id = $arr['id'];
@@ -141,7 +140,6 @@ if (isset($_POST['submit'])) {
 
 					if (sizeof($arrUpdateTagIds) > 1 && sizeof($arrUpdateTagNames) == 1) {
 						$query = "DELETE FROM posts_tags WHERE post_id = $id_edit_post";
-						var_dump($query);
 						$rst = mysqli_query($cnt, $query);
 						;
 						foreach ($arrUpdateTagIds as $id) {
@@ -297,8 +295,8 @@ while ($arr = mysqli_fetch_array($rst)) {
 	</div>
 	<div class="form-group">
 		<label for="tag">Tags ajoutés</label>
-		<input id="tags_ids" type="text" name="tags_ids" />
-		<input id="tags_names" type="text" name="tags_names" />
+		<input id="tags_ids" type="hidden" name="tags_ids" />
+		<input id="tags_names" type="hidden" name="tags_names" />
 		<div id="newtag" style="padding: 20px; border:1px solid #ccc; background: #eee;">
 		<?php 
 			if (count($arr_tags) > 0) {
